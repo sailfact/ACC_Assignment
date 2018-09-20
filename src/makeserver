@@ -1,0 +1,37 @@
+MES-S.out: error.o wrapunix.o wrapsock.o wraplib.o wrapstdio.o MES-S.o readline.o writen.o str_echo.o signal.o sigchldwaitpid.o
+	cc -o MES-S.out str_echo.o error.o wrapunix.o wrapsock.o wraplib.o wrapstdio.o MES-S.o readline.o writen.o signal.o sigchldwaitpid.o
+
+error.o: error.c acc.h
+	cc -c error.c
+
+wrapunix.o: wrapunix.c acc.h
+	cc -c wrapunix.c
+
+wrapsock.o: wrapsock.c acc.h
+	cc -c wrapsock.c
+
+wraplib.o: wraplib.c acc.h
+	cc -c wraplib.c
+
+wrapstdio.o: wrapstdio.c acc.h
+	cc -c wrapstdio.c
+
+MES-S.o: MES-S.c acc.h
+	cc -c MES-S.c
+
+str_echo.o: str_echo.c acc.h
+	cc -c str_echo.c
+
+readline.o: readline.c acc.h
+	cc -c readline.c
+
+writen.o: writen.c acc.h
+	cc -c writen.c
+
+signal.o: signal.c acc.h
+	cc -c signal.c
+
+sigchldwaitpid.o: sigchldwaitpid.c acc.h
+	cc -c sigchldwaitpid.c
+
+
