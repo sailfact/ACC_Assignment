@@ -1,5 +1,5 @@
-MES-C.out: error.o wrapunix.o wrapsock.o wraplib.o wrapstdio.o MES-C.o readline.o writen.o str_mail.o
-	cc -o MES-C.out str_mail.o error.o wrapunix.o wrapsock.o wraplib.o wrapstdio.o MES-C.o readline.o writen.o
+mesc.out: error.o wrapunix.o wrapsock.o wraplib.o wrapstdio.o mesc.o readline.o writen.o str_mail.o
+	cc -o mesc.out str_mail.o error.o wrapunix.o wrapsock.o wraplib.o wrapstdio.o mesc.o readline.o writen.o
 
 error.o: error.c acc.h
 	cc -c error.c
@@ -16,8 +16,8 @@ wraplib.o: wraplib.c acc.h
 wrapstdio.o: wrapstdio.c acc.h
 	cc -c wrapstdio.c
 
-MES-C.o: MES-C.c acc.h
-	cc -c MES-C.c
+mesc.o: mesc.c acc.h
+	cc -c mesc.c
 
 str_mail.o: str_mail.c acc.h
 	cc -c str_mail.c

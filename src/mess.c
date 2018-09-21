@@ -2,12 +2,17 @@
 
 static void	*doit(void *);		/* each thread executes this function */
 
+static struct client_list *head = NULL;
+static struct client_list *current = NULL;
+
 int main(int argc, char **argv)
 {
 	int		listenfd, *iptr;
 	pthread_t	tid;
 	socklen_t	addrlen, len;
 	struct sockaddr	*cliaddr;
+
+	head = (struct client_list*)malloc(sizeof(struct client_list));
 
 	if (argc == 2)
 		listenfd = Tcp_listen(NULL, argv[1], &addrlen);
@@ -38,4 +43,9 @@ static void * doit(void *arg)
 	str_mailserver(connfd);		/* same function as before */
 	Close(connfd);			/* we are done with connected socket */
 	return(NULL);
+}
+
+
+void str_mail(int sockfd) {
+
 }

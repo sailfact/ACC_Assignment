@@ -17,28 +17,9 @@
 
 #define	MAXLINE	4096
 #define	LISTENQ	1024
-#define	SERV_TCP_PORT	52001
+#define	SERV_TCP_PORT 51020
 #define TIMEOUT 20
 #define	SA	struct sockaddr
 #define	min(a,b)	((a) < (b) ? (a) : (b))
 #define	max(a,b)	((a) > (b) ? (a) : (b))
 typedef	void	Sigfunc(int);
-
-enum status {
-    Read,
-    Unread
-};
-
-struct mailbox_info {
-    int             email_id;           /* client id */
-    char            sender_name[20];    /* senders name */
-    int             time;               /* time sent */
-    enum status     status;             /* mail status */
-};
-
-typedef struct {
-    pthread     thread_tid;     /* thread ID */
-    long        thread_count;   /* # connections handled */
-} Thread;
-
-Thread *tptr; 
