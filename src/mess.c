@@ -2,7 +2,7 @@
 
 static int nthreads;
 pthread_mutex_t clifd_mutex = PTHREAD_MUTEX_INITIALIZER;
-Pthread_cond_t clifd_cond =PTHREAD_COND_INITIALIZER
+pthread_cond_t clifd_cond =PTHREAD_COND_INITIALIZER;
 
 static struct client_list *head = NULL;
 static struct client_list *current = NULL;
@@ -16,7 +16,7 @@ int main(int argc, char **argv) {
 	if (argc == 3)
 		listenfd = Tcp_listen(NULL, argv[1], &addrlen);
 	else if (argc == 4)
-		listenfd = Tcp_lsiten(argv[1], argv[2], &addrlen);
+		listenfd = Tcp_listen(argv[1], argv[2], &addrlen);
 	else
 		err_quit("usage: mess [ <host> ] <port#> <#threads>");
 	
@@ -32,15 +32,13 @@ int main(int argc, char **argv) {
 		thread_make(i);		/* only main thread returns */
 	}
 	
-	Signal(SIGINT, sig_int);
-
 	while (1) {
 		clilen = addrlen;
 		connfd = Accept(listenfd, cliaddr, &clilen);
 
 		Pthread_mutex_lock(&clifd_mutex);
 		clifd[iput] = connfd;
-		if (++iput = MAXNCLI)
+		if (++iput == MAXNCLI)
 			iput = 0;
 		if (iput == iget)
 			err_quit("iput = iget = %d", iput);
@@ -57,7 +55,7 @@ void thread_make(int i) {
 
 void * thread_main(void *arg) {
 	int connfd;
-	void web_child(int);
+	void str_echo(int);
 
 	printf("thread %d starting\n", (int)arg);
 	while (1) {
@@ -70,7 +68,7 @@ void * thread_main(void *arg) {
 			Pthread_mutex_unlock(&clifd_mutex);
 			tptr[(int)arg].thread_count++;
 
-			web_child(connfd);
+			str_echo(connfd);
 			Close(connfd);
 	}
 }

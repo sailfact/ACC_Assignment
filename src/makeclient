@@ -1,5 +1,5 @@
-mesc.out: error.o wrapunix.o wrapsock.o wraplib.o wrapstdio.o mesc.o readline.o writen.o str_mail.o
-	cc -o mesc.out str_mail.o error.o wrapunix.o wrapsock.o wraplib.o wrapstdio.o mesc.o readline.o writen.o
+mesc.out: error.o wrapunix.o wrapsock.o wraplib.o wrapstdio.o mesc.o readline.o writen.o str_cli.o 
+	cc -o mesc.out str_cli.o error.o wrapunix.o wrapsock.o wraplib.o wrapstdio.o mesc.o readline.o writen.o -lpthread
 
 error.o: error.c acc.h
 	cc -c error.c
@@ -19,11 +19,20 @@ wrapstdio.o: wrapstdio.c acc.h
 mesc.o: mesc.c acc.h
 	cc -c mesc.c
 
-str_mail.o: str_mail.c acc.h
-	cc -c str_mail.c
+str_cli.o: str_cli.c acc.h
+	cc -c str_cli.c
 
 readline.o: readline.c acc.h
 	cc -c readline.c
 
 writen.o: writen.c acc.h
 	cc -c writen.c
+
+wrappthread.o: wrappthread.c acc.h
+	cc -c wrappthread.c -lpthread
+
+tcp_connect.o: tcp_connect.c acc.h
+	cc -c tcp_connect.c -lpthread
+
+clean:
+	rm -rf *.o *~ mesc.out

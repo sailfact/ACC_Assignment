@@ -14,6 +14,7 @@
 #include <signal.h>
 #include <fcntl.h>
 #include <sys/select.h>
+#include <pthread.h>
 
 #define	MAXLINE	4096
 #define	LISTENQ	1024
@@ -25,8 +26,8 @@
 typedef	void	Sigfunc(int);
 
 enum status {
-    Read,
-    Unread
+    Viewed,
+    NotViewed
 };
 
 struct mailbox_info {
@@ -37,7 +38,7 @@ struct mailbox_info {
 };
 
 typedef struct {
-    pthread     thread_tid;     /* thread ID */
+    pthread_t     thread_tid;     /* thread ID */
     long        thread_count;   /* # connections handled */
 } Thread;
 
