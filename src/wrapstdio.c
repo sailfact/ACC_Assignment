@@ -4,15 +4,13 @@
 
 #include	"acc.h"
 
-void
-Fclose(FILE *fp)
+void Fclose(FILE *fp)
 {
 	if (fclose(fp) != 0)
 		err_sys("fclose error");
 }
 
-FILE *
-Fdopen(int fd, const char *type)
+FILE * Fdopen(int fd, const char *type)
 {
 	FILE	*fp;
 
@@ -22,8 +20,7 @@ Fdopen(int fd, const char *type)
 	return(fp);
 }
 
-char *
-Fgets(char *ptr, int n, FILE *stream)
+char * Fgets(char *ptr, int n, FILE *stream)
 {
 	char	*rptr;
 
@@ -33,8 +30,7 @@ Fgets(char *ptr, int n, FILE *stream)
 	return (rptr);
 }
 
-FILE *
-Fopen(const char *filename, const char *mode)
+FILE * Fopen(const char *filename, const char *mode)
 {
 	FILE	*fp;
 
@@ -44,8 +40,7 @@ Fopen(const char *filename, const char *mode)
 	return(fp);
 }
 
-void
-Fputs(const char *ptr, FILE *stream)
+void Fputs(const char *ptr, FILE *stream)
 {
 	if (fputs(ptr, stream) == EOF)
 		err_sys("fputs error");

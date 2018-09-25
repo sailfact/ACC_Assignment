@@ -1,9 +1,7 @@
 /* include signal */
 #include	"acc.h"
-#include	<signal.h>
 
-Sigfunc *
-signal(int signo, Sigfunc *func)
+Sigfunc * signal(int signo, Sigfunc *func)
 {
 	struct sigaction	act, oact;
 
@@ -25,8 +23,7 @@ signal(int signo, Sigfunc *func)
 }
 /* end signal */
 
-Sigfunc *
-Signal(int signo, Sigfunc *func)	/* for our signal() function */
+Sigfunc * Signal(int signo, Sigfunc *func)	/* for our signal() function */
 {
 	Sigfunc	*sigfunc;
 

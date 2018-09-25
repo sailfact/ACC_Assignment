@@ -4,13 +4,11 @@
 
 int		daemon_proc;		/* set nonzero by daemon_init() */
 
-static void	err_doit(int, int, const char *, va_list);
-
+static void	err_doit(int, int, const char *, va_list);;
 /* Nonfatal error related to a system call.
  * Print a message and return. */
 
-void
-err_ret(const char *fmt, ...)
+void err_ret(const char *fmt, ...)
 {
 	va_list		ap;
 
@@ -23,8 +21,7 @@ err_ret(const char *fmt, ...)
 /* Fatal error related to a system call.
  * Print a message and terminate. */
 
-void
-err_sys(const char *fmt, ...)
+void err_sys(const char *fmt, ...)
 {
 	va_list		ap;
 
@@ -37,8 +34,7 @@ err_sys(const char *fmt, ...)
 /* Fatal error related to a system call.
  * Print a message, dump core, and terminate. */
 
-void
-err_dump(const char *fmt, ...)
+void err_dump(const char *fmt, ...)
 {
 	va_list		ap;
 
@@ -52,8 +48,7 @@ err_dump(const char *fmt, ...)
 /* Nonfatal error unrelated to a system call.
  * Print a message and return. */
 
-void
-err_msg(const char *fmt, ...)
+void err_msg(const char *fmt, ...)
 {
 	va_list		ap;
 
@@ -66,8 +61,7 @@ err_msg(const char *fmt, ...)
 /* Fatal error unrelated to a system call.
  * Print a message and terminate. */
 
-void
-err_quit(const char *fmt, ...)
+void err_quit(const char *fmt, ...)
 {
 	va_list		ap;
 
@@ -80,8 +74,7 @@ err_quit(const char *fmt, ...)
 /* Print a message and return to caller.
  * Caller specifies "errnoflag" and "level". */
 
-static void
-err_doit(int errnoflag, int level, const char *fmt, va_list ap)
+static void err_doit(int errnoflag, int level, const char *fmt, va_list ap)
 {
 	int		errno_save, n;
 	char	buf[MAXLINE];

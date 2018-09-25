@@ -18,8 +18,7 @@
 
 #include	"acc.h"
 
-void *
-Calloc(size_t n, size_t size)
+void * Calloc(size_t n, size_t size)
 {
 	void	*ptr;
 
@@ -28,22 +27,19 @@ Calloc(size_t n, size_t size)
 	return(ptr);
 }
 
-void
-Close(int fd)
+void Close(int fd)
 {
 	if (close(fd) == -1)
 		err_sys("close error");
 }
 
-void
-Dup2(int fd1, int fd2)
+void Dup2(int fd1, int fd2)
 {
 	if (dup2(fd1, fd2) == -1)
 		err_sys("dup2 error");
 }
 
-int
-Fcntl(int fd, int cmd, int arg)
+int Fcntl(int fd, int cmd, int arg)
 {
 	int	n;
 
@@ -52,16 +48,14 @@ Fcntl(int fd, int cmd, int arg)
 	return(n);
 }
 
-void
-Gettimeofday(struct timeval *tv, void *foo)
+void Gettimeofday(struct timeval *tv, void *foo)
 {
 	if (gettimeofday(tv, foo) == -1)
 		err_sys("gettimeofday error");
 	return;
 }
 
-int
-Ioctl(int fd, int request, void *arg)
+int Ioctl(int fd, int request, void *arg)
 {
 	int		n;
 
@@ -70,8 +64,7 @@ Ioctl(int fd, int request, void *arg)
 	return(n);	/* streamio of I_LIST returns value */
 }
 
-pid_t
-Fork(void)
+pid_t Fork(void)
 {
 	pid_t	pid;
 
@@ -80,8 +73,7 @@ Fork(void)
 	return(pid);
 }
 
-void *
-Malloc(size_t size)
+void * Malloc(size_t size)
 {
 	void	*ptr;
 
@@ -90,11 +82,9 @@ Malloc(size_t size)
 	return(ptr);
 }
 
-
 #include	<sys/mman.h>
 
-void *
-Mmap(void *addr, size_t len, int prot, int flags, int fd, off_t offset)
+void * Mmap(void *addr, size_t len, int prot, int flags, int fd, off_t offset)
 {
 	void	*ptr;
 
@@ -103,8 +93,7 @@ Mmap(void *addr, size_t len, int prot, int flags, int fd, off_t offset)
 	return(ptr);
 }
 
-int
-Open(const char *pathname, int oflag, mode_t mode)
+int Open(const char *pathname, int oflag, mode_t mode)
 {
 	int		fd;
 
@@ -113,15 +102,13 @@ Open(const char *pathname, int oflag, mode_t mode)
 	return(fd);
 }
 
-void
-Pipe(int *fds)
+void Pipe(int *fds)
 {
 	if (pipe(fds) < 0)
 		err_sys("pipe error");
 }
 
-ssize_t
-Read(int fd, void *ptr, size_t nbytes)
+ssize_t Read(int fd, void *ptr, size_t nbytes)
 {
 	ssize_t		n;
 
@@ -132,8 +119,7 @@ Read(int fd, void *ptr, size_t nbytes)
 
 
 
-char *
-Strdup(const char *str)
+char * Strdup(const char *str)
 {
 	char	*ptr;
 
@@ -142,8 +128,7 @@ Strdup(const char *str)
 	return(ptr);
 }
 
-long
-Sysconf(int name)
+long Sysconf(int name)
 {
 	long	val;
 
@@ -154,24 +139,20 @@ Sysconf(int name)
 }
 
 #ifdef	HAVE_SYS_SYSCTL_H
-void
-Sysctl(int *name, u_int namelen, void *oldp, size_t *oldlenp,
-	   void *newp, size_t newlen)
+void Sysctl(int *name, u_int namelen, void *oldp, size_t *oldlenp, void *newp, size_t newlen)
 {
 	if (sysctl(name, namelen, oldp, oldlenp, newp, newlen) == -1)
 		err_sys("sysctl error");
 }
 #endif
 
-void
-Unlink(const char *pathname)
+void Unlink(const char *pathname)
 {
 	if (unlink(pathname) == -1)
 		err_sys("unlink error for %s", pathname);
 }
 
-pid_t
-Wait(int *iptr)
+pid_t Wait(int *iptr)
 {
 	pid_t	pid;
 
@@ -180,8 +161,7 @@ Wait(int *iptr)
 	return(pid);
 }
 
-pid_t
-Waitpid(pid_t pid, int *iptr, int options)
+pid_t Waitpid(pid_t pid, int *iptr, int options)
 {
 	pid_t	retpid;
 
@@ -190,8 +170,7 @@ Waitpid(pid_t pid, int *iptr, int options)
 	return(retpid);
 }
 
-void
-Write(int fd, void *ptr, size_t nbytes)
+void Write(int fd, void *ptr, size_t nbytes)
 {
 	if (write(fd, ptr, nbytes) != nbytes)
 		err_sys("write error");

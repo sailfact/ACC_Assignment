@@ -1,8 +1,7 @@
 /* include tcp_connect */
 #include	"acc.h"
 
-int
-tcp_connect(const char *host, const char *serv)
+int tcp_connect(const char *host, const char *serv)
 {
 	int				sockfd, n;
 	struct addrinfo	hints, *res, *ressave;
@@ -42,8 +41,7 @@ tcp_connect(const char *host, const char *serv)
  * a Tcp_connect() function.
  */
 
-int
-Tcp_connect(const char *host, const char *serv)
+int Tcp_connect(const char *host, const char *serv)
 {
 	return(tcp_connect(host, serv));
 }

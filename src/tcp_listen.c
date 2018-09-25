@@ -1,8 +1,7 @@
 /* include tcp_listen */
 #include	"acc.h"
 
-int
-tcp_listen(const char *host, const char *serv, socklen_t *addrlenp)
+int tcp_listen(const char *host, const char *serv, socklen_t *addrlenp)
 {
 	int				listenfd, n;
 	const int		on = 1;
@@ -50,8 +49,7 @@ tcp_listen(const char *host, const char *serv, socklen_t *addrlenp)
  * a Tcp_listen() function.
  */
 
-int
-Tcp_listen(const char *host, const char *serv, socklen_t *addrlenp)
+int Tcp_listen(const char *host, const char *serv, socklen_t *addrlenp)
 {
 	return(tcp_listen(host, serv, addrlenp));
 }

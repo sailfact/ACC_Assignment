@@ -1,3 +1,5 @@
+#ifndef ACC_H
+#define ACC_H
 #include <stdio.h>
 #include <ctype.h>
 #include <stdlib.h>
@@ -26,8 +28,8 @@
 typedef	void	Sigfunc(int);
 
 enum status {
-    Viewed,
-    NotViewed
+    READ,
+    UNREAD
 };
 
 struct mailbox_info {
@@ -38,12 +40,13 @@ struct mailbox_info {
 };
 
 typedef struct {
-    pthread_t     thread_tid;     /* thread ID */
-    long        thread_count;   /* # connections handled */
+    pthread_t       thread_tid;     /* thread ID */
+    long            thread_count;   /* # connections handled */
 } Thread;
 
 Thread *tptr;
-#define MAXNCLI 32 
-int clifd[MAXNCLI], iget, iput;
+#define MAXNCLI 32      /* the maximum amount of clients for this program!!! */
+int             clifd[MAXNCLI], iget, iput;
 pthread_mutex_t clifd_mutex;
-pthread_cond_t clifd_cond;
+pthread_cond_t  clifd_cond;
+#endif

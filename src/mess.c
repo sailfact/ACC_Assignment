@@ -2,16 +2,16 @@
 
 static int nthreads;
 pthread_mutex_t clifd_mutex = PTHREAD_MUTEX_INITIALIZER;
-pthread_cond_t clifd_cond =PTHREAD_COND_INITIALIZER;
+pthread_cond_t clifd_cond = PTHREAD_COND_INITIALIZER;
 
 static struct client_list *head = NULL;
 static struct client_list *current = NULL;
 
 int main(int argc, char **argv) {
-	int 	i, listenfd, connfd;
-	void	sig_int(int), thread_make(int);
-	socklen_t	addrlen, clilen;
-	struct sockaddr* cliaddr;
+	int 				i, listenfd, connfd;
+	void				sig_int(int), thread_make(int);
+	socklen_t			addrlen, clilen;
+	struct sockaddr* 	cliaddr;
 
 	if (argc == 3)
 		listenfd = Tcp_listen(NULL, argv[1], &addrlen);
@@ -54,8 +54,8 @@ void thread_make(int i) {
 }
 
 void * thread_main(void *arg) {
-	int connfd;
-	void str_echo(int);
+	int 	connfd;
+	void 	str_echo(int);
 
 	printf("thread %d starting\n", (int)arg);
 	while (1) {

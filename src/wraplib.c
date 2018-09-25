@@ -5,8 +5,7 @@
 
 #include	"acc.h"
 
-const char *
-Inet_ntop(int family, const void *addrptr, char *strptr, size_t len)
+const char * Inet_ntop(int family, const void *addrptr, char *strptr, size_t len)
 {
 	const char	*ptr;
 
@@ -17,8 +16,7 @@ Inet_ntop(int family, const void *addrptr, char *strptr, size_t len)
 	return(ptr);
 }
 
-void
-Inet_pton(int family, const char *strptr, void *addrptr)
+void Inet_pton(int family, const char *strptr, void *addrptr)
 {
 	int		n;
 

@@ -25,7 +25,7 @@ str_echo08.o: str_echo08.c acc.h
 readline.o: readline.c acc.h
 	cc -c readline.c
 
-writen.o: writen.c acc.h
+writen.o: writen.c writen.h acc.h
 	cc -c writen.c
 
 signal.o: signal.c acc.h
@@ -34,7 +34,7 @@ signal.o: signal.c acc.h
 wrappthread.o: wrappthread.c acc.h
 	cc -c wrappthread.c -lpthread
 
-tcp_listen.o: tcp_listen.c acc.h
+tcp_listen.o: tcp_listen.c wrapsock.h acc.h
 	cc -c tcp_listen.c
 
 clean:

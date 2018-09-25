@@ -11,7 +11,7 @@ struct client {
 };
 
 struct client_list {
-    struct client   client;
+    struct client       client;
     struct client_list   *next_client;
 };
 

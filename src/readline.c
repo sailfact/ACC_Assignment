@@ -1,8 +1,7 @@
 /* include readline */
 #include	"acc.h"
 
-static ssize_t
-my_read(int fd, char *ptr)
+static ssize_t my_read(int fd, char *ptr)
 {
 	static int	read_cnt = 0;
 	static char	*read_ptr;
@@ -24,8 +23,7 @@ again:
 	return(1);
 }
 
-ssize_t
-readline(int fd, void *vptr, size_t maxlen)
+ssize_t readline(int fd, void *vptr, size_t maxlen)
 {
 	int		n, rc;
 	char	c, *ptr;
@@ -50,8 +48,7 @@ readline(int fd, void *vptr, size_t maxlen)
 }
 /* end readline */
 
-ssize_t
-Readline(int fd, void *ptr, size_t maxlen)
+ssize_t Readline(int fd, void *ptr, size_t maxlen)
 {
 	ssize_t		n;
 
