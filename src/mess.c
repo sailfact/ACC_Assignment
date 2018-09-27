@@ -14,15 +14,13 @@ int main(int argc, char **argv) {
 	struct sockaddr* 	cliaddr;
 
 	if (argc == 3)
-		listenfd = Tcp_listen(NULL, argv[1], &addrlen);
-	else if (argc == 4)
-		listenfd = Tcp_listen(argv[1], argv[2], &addrlen);
+		listenfd = Tcp_listen(NULL, argv[2], &addrlen);
 	else
-		err_quit("usage: mess [ <host> ] <port#> <#threads>");
+		err_quit("usage: mess <#threads> <#threads>");
 	
 	cliaddr = Malloc(addrlen);
 
-	nthreads = atoi(argv[argc - 1]);
+	nthreads = atoi(argv[1]);
 	tptr = Calloc(nthreads, sizeof(Thread));
 	iget = iput = 0;
 

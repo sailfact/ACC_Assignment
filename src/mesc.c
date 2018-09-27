@@ -16,7 +16,7 @@ int main(int argc, char **argv) {
 
 	Connect(sockfd, (SA *) &servaddr, sizeof(servaddr));
 
-	str_cli(stdin, sockfd);		/* do it all */
+	mail_cli(stdin, sockfd);		/* do it all */
 
 	exit(0);
 }
