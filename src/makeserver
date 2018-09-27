@@ -1,5 +1,5 @@
-mess.out: error.o wrapunix.o wrapsock.o wraplib.o wrapstdio.o mess.o readline.o writen.o str_echo08.o signal.o wrappthread.o tcp_listen.o 
-	cc -o mess.out str_echo08.o error.o wrapunix.o wrapsock.o wraplib.o wrapstdio.o mess.o readline.o writen.o signal.o wrappthread.o tcp_listen.o -lpthread
+mess.out: error.o wrapunix.o wrapsock.o wraplib.o wrapstdio.o mess.o readline.o writen.o mail_srv.o signal.o wrappthread.o tcp_listen.o 
+	cc -o mess.out mail_srv.o error.o wrapunix.o wrapsock.o wraplib.o wrapstdio.o mess.o readline.o writen.o signal.o wrappthread.o tcp_listen.o -lpthread
 
 error.o: error.c acc.h
 	cc -c error.c
@@ -19,8 +19,8 @@ wrapstdio.o: wrapstdio.c acc.h
 mess.o: mess.c acc.h
 	cc -c mess.c
 
-str_echo08.o: str_echo08.c acc.h
-	cc -c str_echo08.c
+mail_srv.o: mail_srv.c acc.h
+	cc -c mail_srv.c
 
 readline.o: readline.c acc.h
 	cc -c readline.c

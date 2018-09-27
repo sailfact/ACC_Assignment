@@ -53,7 +53,7 @@ void thread_make(int i) {
 
 void * thread_main(void *arg) {
 	int 	connfd;
-	void 	str_echo(int);
+	void 	mail_srv(int);
 
 	printf("thread %d starting\n", (int)arg);
 	while (1) {
@@ -66,7 +66,7 @@ void * thread_main(void *arg) {
 			Pthread_mutex_unlock(&clifd_mutex);
 			tptr[(int)arg].thread_count++;
 
-			str_echo(connfd);
+			mail_srv(connfd);
 			Close(connfd);
 	}
 }

@@ -17,6 +17,7 @@
 #include <fcntl.h>
 #include <sys/select.h>
 #include <pthread.h>
+#include <stdarg.h>
 
 #define	MAXLINE	4096
 #define	LISTENQ	1024
