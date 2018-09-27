@@ -1,8 +1,6 @@
 #include	"acc.h"
 
-int check_command(char *arg1);
-int check_command(char *arg1, char *arg2):
-int check_command(char *arg1, char *arg2, char *arg3);
+int check_command(int argc, ...);
 
 void mail_srv(int sockfd)
 {
@@ -33,16 +31,27 @@ void mail_srv(int sockfd)
 	}
 }
 
-int check_command(char *arg1) {
+int check_command(int argc, ...) {
+    va_list valist;
+    char *args[argc];
+    char *str;
+    int  i = 0;
 
-}
+    va_start(valist, argc);
 
-int check_command(char *arg1, char *arg2) {
+    for (i = 0; i < argc; i++) {
+        strcpy(args[i], va_arg(valist, char *));
+    }
+    
+    strcpy(str, args[0]);
+    for(int i = 0; str[i]; i++){
+        str[i] = tolower(str[i]);
+    }
 
-}
+    if (strcmp(str, "make") == 0)
+        printf("make");
 
-int check_command(char *arg1, char *arg2, char *arg3) {
-
+    return 0;
 }
 
 
