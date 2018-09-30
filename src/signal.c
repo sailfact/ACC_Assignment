@@ -8,11 +8,14 @@ Sigfunc * signal(int signo, Sigfunc *func)
 	act.sa_handler = func;
 	sigemptyset(&act.sa_mask);
 	act.sa_flags = 0;
-	if (signo == SIGALRM) {
+	if (signo == SIGALRM) 
+	{
 #ifdef	SA_INTERRUPT
 		act.sa_flags |= SA_INTERRUPT;	/* SunOS 4.x */
 #endif
-	} else {
+	} 
+	else 
+	{
 #ifdef	SA_RESTART
 		act.sa_flags |= SA_RESTART;		/* SVR4, 44BSD */
 #endif

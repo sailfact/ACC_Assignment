@@ -1,9 +1,11 @@
 #include "acc.h"
 
-void mail_cli (FILE *fp, int sockfd) {
+void mail_cli (FILE *fp, int sockfd)  
+{
     char	sendline[MAXLINE], recvline[MAXLINE];
     printf("\nMESC>");
-	while ((void *) Fgets(sendline, MAXLINE, fp) != NULL) {
+	while ((void *) Fgets(sendline, MAXLINE, fp) != NULL) 
+	{
 		Writen(sockfd, sendline, strlen(sendline));
 
 		if (Readline(sockfd, recvline, MAXLINE) == 0)

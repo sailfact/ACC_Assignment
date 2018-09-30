@@ -10,8 +10,10 @@ ssize_t writen(int fd, const void *vptr, size_t n)
 
 	ptr = vptr;
 	nleft = n;
-	while (nleft > 0) {
-		if ( (nwritten = write(fd, ptr, nleft)) <= 0) {
+	while (nleft > 0) 
+	{
+		if ( (nwritten = write(fd, ptr, nleft)) <= 0) 
+		{
 			if (errno == EINTR)
 				nwritten = 0;		/* and call write() again */
 			else

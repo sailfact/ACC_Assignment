@@ -8,11 +8,13 @@ void mail_srv(int sockfd)
 	ssize_t		n;
 	char		line[MAXLINE];
     int scans;
-	for ( ; ; ) {
+	for ( ; ; ) 
+    {
 		if ( (n = Readline(sockfd, line, MAXLINE)) == 0)
 			return;		/* connection closed by other end */
         scans = sscanf(line, "%s %s %s", arg1, arg2, arg2);
-        switch (scans) {
+        switch (scans) 
+        {
             case 3:
                 check_command(arg1, arg2, arg3);
                 break;
@@ -31,7 +33,8 @@ void mail_srv(int sockfd)
 	}
 }
 
-int check_command(int argc, ...) {
+int check_command(int argc, ...)
+{
     va_list valist;
     char *args[argc];
     char *str;
@@ -39,14 +42,12 @@ int check_command(int argc, ...) {
 
     va_start(valist, argc);
 
-    for (i = 0; i < argc; i++) {
+    for (i = 0; i < argc; i++)
         strcpy(args[i], va_arg(valist, char *));
-    }
     
     strcpy(str, args[0]);
-    for(int i = 0; str[i]; i++){
+    for(int i = 0; str[i]; i++)
         str[i] = tolower(str[i]);
-    }
 
     if (strcmp(str, "make") == 0)
         printf("make");

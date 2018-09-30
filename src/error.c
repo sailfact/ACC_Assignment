@@ -90,9 +90,10 @@ static void err_doit(int errnoflag, int level, const char *fmt, va_list ap)
 		snprintf(buf+n, sizeof(buf)-n, ": %s", strerror(errno_save));
 	strcat(buf, "\n");
 
-	if (daemon_proc) {
+	if (daemon_proc)
 		syslog(level, buf);
-	} else {
+	else 
+	{
 		fflush(stdout);	/* in case stdout and stderr are the same */
 		fputs(buf, stderr);
 		fflush(stderr);

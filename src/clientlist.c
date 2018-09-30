@@ -1,11 +1,13 @@
 #include "clientlist.h"
 
 //display the list
-void printList() {
+void printList() 
+{
     struct client_list *ptr = head;
     
     //start from the beginning
-    while(ptr != NULL) {
+    while(ptr != NULL) 
+    {
         printf("[name = %s time = %d addr = %s port = %d count = %d]\n",
         ptr->client.client_name, 
         ptr->client.time_joined, 
@@ -17,7 +19,8 @@ void printList() {
 }
 
 //insert link at the first location
-void insertFirst(struct client data) {
+void insertFirst(struct client data) 
+{
     //create a link
     struct client_list *link = (struct client_list*) malloc(sizeof(struct client_list));
         
@@ -31,7 +34,8 @@ void insertFirst(struct client data) {
 }
 
 //delete first item
-struct client_list* deleteFirst() {
+struct client_list* deleteFirst() 
+{
 
     //save reference to first link
     struct client_list *tempLink = head;
@@ -44,40 +48,40 @@ struct client_list* deleteFirst() {
 }
 
 //is list empty
-int isEmpty() {
+int isEmpty() 
+{
     return head == NULL;
 }
 
-int length() {
+int length() 
+{
     int length = 0;
     struct client_list *current;
         
-    for(current = head; current != NULL; current = current->next_client) {
+    for(current = head; current != NULL; current = current->next_client)
         length++;
-    }
         
     return length;
 }
 
 //find a link with given entry
-struct client_list* find(struct client entry) {
+struct client_list* find(struct client entry) 
+{
 
     //start from the first link
     struct client_list* current = head;
 
     //if list is empty
-    if(head == NULL) {
+    if(head == NULL) 
         return NULL;
-    }
 
     //navigate through list
-    while(!strcmp(current->client.client_name,entry.client_name)) {
-        
+    while(!strcmp(current->client.client_name,entry.client_name)) 
+    {
         //if it is last struct client_list
-        if(current->next_client == NULL) {
+        if(current->next_client == NULL) 
             return NULL;
-        } else {
-            //go to next_client link
+        else //go to next_client link
             current = current->next_client;
         }
     }      
@@ -87,24 +91,23 @@ struct client_list* find(struct client entry) {
 }
 
 //delete a link with given entry
-struct client_list* delete(struct client entry) {
-
+struct client_list* delete(struct client entry) 
     //start from the first link
     struct client_list* current = head;
     struct client_list* previous = NULL;
         
     //if list is empty
-    if(head == NULL) {
+    if(head == NULL) 
         return NULL;
-    }
 
     //navigate through list
-    while(!strcmp(current->client.client_name,entry.client_name)) {
-
+    while(!strcmp(current->client.client_name,entry.client_name)) 
+    {
         //if it is last struct client_list
-        if(current->next_client == NULL) {
+        if(current->next_client == NULL) 
             return NULL;
-        } else {
+        else 
+        {
             //store reference to current link
             previous = current;
             //move to next_client link
@@ -113,13 +116,10 @@ struct client_list* delete(struct client entry) {
     }
 
     //found a match, update the link
-    if(current == head) {
-        //change first to point to next_client link
+    if(current == head)     //change first to point to next_client link
         head = head->next_client;
-    } else {
-        //bypass the current link
-        previous->next_client = current->next_client;
-    }    
+    else //bypass the current link
+        previous->next_client = current->next_client;  
 	
     return current;
 }

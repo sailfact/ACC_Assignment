@@ -1,12 +1,11 @@
 #include	"acc.h"
 
-void
-str_cli(FILE *fp, int sockfd)
+void str_cli(FILE *fp, int sockfd)
 {
 	char	sendline[MAXLINE], recvline[MAXLINE];
 
-	while ((void *) Fgets(sendline, MAXLINE, fp) != NULL) {
-
+	while ((void *) Fgets(sendline, MAXLINE, fp) != NULL) 
+	{
 		Writen(sockfd, sendline, strlen(sendline));
 
 		if (Readline(sockfd, recvline, MAXLINE) == 0)

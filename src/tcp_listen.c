@@ -17,7 +17,8 @@ int tcp_listen(const char *host, const char *serv, socklen_t *addrlenp)
 				 host, serv, gai_strerror(n));
 	ressave = res;
 
-	do {
+	do 
+	{
 		listenfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
 		if (listenfd < 0)
 			continue;		/* error, try next one */
@@ -27,7 +28,8 @@ int tcp_listen(const char *host, const char *serv, socklen_t *addrlenp)
 			break;			/* success */
 
 		Close(listenfd);	/* bind error, close and try next one */
-	} while ( (res = res->ai_next) != NULL);
+	} 
+	while ( (res = res->ai_next) != NULL);
 
 	if (res == NULL)	/* errno from final socket() or bind() */
 		err_sys("tcp_listen error for %s, %s", host, serv);

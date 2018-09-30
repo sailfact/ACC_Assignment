@@ -7,7 +7,8 @@ pthread_cond_t clifd_cond = PTHREAD_COND_INITIALIZER;
 static struct client_list *head = NULL;
 static struct client_list *current = NULL;
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv) 
+{
 	int 				i, listenfd, connfd;
 	void				sig_int(int), thread_make(int);
 	socklen_t			addrlen, clilen;
@@ -26,11 +27,11 @@ int main(int argc, char **argv) {
 
 	/* create all the threads */
 	
-	for(i = 0; i < nthreads; i++) {
+	for(i = 0; i < nthreads; i++)
 		thread_make(i);		/* only main thread returns */
-	}
 	
-	while (1) {
+	while (1) 
+	{
 		clilen = addrlen;
 		connfd = Accept(listenfd, cliaddr, &clilen);
 
@@ -45,13 +46,15 @@ int main(int argc, char **argv) {
 	}
 }
 
-void thread_make(int i) {
+void thread_make(int i)
+{
 	void 	*thread_main(void *);
 	Pthread_create(&tptr[i].thread_tid, NULL, &thread_main, (void *) i);
 	return;		/* main thread returns */
 }
 
-void * thread_main(void *arg) {
+void * thread_main(void *arg) 
+{
 	int 	connfd;
 	void 	mail_srv(int);
 

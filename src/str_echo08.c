@@ -8,12 +8,15 @@ str_echo(int sockfd)
 	char		line[MAXLINE];
 	char 		operator;
 
-	for ( ; ; ) {
+	for ( ; ; ) 
+	{
 		if ( (n = Readline(sockfd, line, MAXLINE)) == 0)
 			return;		/* connection closed by other end */
 
-		if (sscanf(line, "%ld %c %ld", &arg1, &operator, &arg2) == 3) {
-			switch (operator) {
+		if (sscanf(line, "%ld %c %ld", &arg1, &operator, &arg2) == 3) 
+		{
+			switch (operator) 
+			{
 				case '+':
 					snprintf(line, sizeof(line), "%ld\n", arg1 + arg2);
 					break;
