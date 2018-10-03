@@ -1,5 +1,10 @@
 #include	"acc.h"
 
+void mail_srv(int sockfd);
+int check_command_one(char *arg);
+int check_command_two(char *arg1, char *arg2);
+int check_command_three(char *arg1, char *arg2, char *arg3);
+
 static int nthreads;
 pthread_mutex_t clifd_mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t clifd_cond = PTHREAD_COND_INITIALIZER;
@@ -72,4 +77,80 @@ void * thread_main(void *arg)
 			mail_srv(connfd);
 			Close(connfd);
 	}
+}
+
+void mail_srv(int sockfd)
+{
+	char		arg1[20], arg2[20], arg3[20];
+	ssize_t		n;
+	char		line[MAXLINE];
+    int scans;
+	for ( ; ; ) 
+    {
+		if ( (n = Readline(sockfd, line, MAXLINE)) == 0)
+			return;		/* connection closed by other end */
+        scans = sscanf(line, "%s %s %s", arg1, arg2, arg2);
+        switch (scans) 
+        {
+            case 3:
+                check_command_three(arg1, arg2, arg3);
+                break;
+            case 2:
+                check_command_two(arg1, arg2);
+                break;
+            case 1:
+                check_command_one(arg1);
+                break;
+            default:
+			    snprintf(line, sizeof(line), "input error\n");
+        }
+
+		n = strlen(line);
+		Writen(sockfd, line, n);
+	}
+}
+int check_command_one(char *arg) 
+{
+	int len = strlen(arg);
+    char str[sizeof(arg)+1];
+    for(int i = 0; i < len; i++)
+            str[i] = tolower(arg[i]);
+
+    if (strcmp(str, "quit") == 0)
+        printf("make\n");
+    else if (strcmp(str, "get_client_list") == 0)
+        printf("get_client_list\n");
+
+	return;
+}
+
+int check_command_two(char *arg1, char *arg2) 
+{
+	int len = strlen(arg1);
+    char str[sizeof(arg1)+1];
+    for(int i = 0; i < len; i++)
+            str[i] = tolower(arg1[i]);
+
+    if (strcmp(str, "make") == 0)
+        printf("make %s\n", arg2);
+    else if (strcmp(str, "get_mailbox") == 0)
+        printf("get_mailbox %s\n", arg2);
+
+    return;
+}
+
+int check_command_three(char *arg1, char *arg2, char *arg3) 
+{
+	printf("cmd%s name%s id%s\n", arg1, arg2, arg3);
+	int len = strlen(arg1);
+    char str[sizeof(arg1)+1];
+    for(int i = 0; i < len; i++)
+            str[i] = tolower(arg1[i]);
+        
+    if (strcmp(str, "read") == 0)
+        printf("read %s %s\n", arg2, arg3);
+    else if (strcmp(str, "delete") == 0)
+        printf("delete %s %s\n", arg2, arg3);
+
+    return;
 }
