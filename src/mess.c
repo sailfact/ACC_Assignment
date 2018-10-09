@@ -1,16 +1,15 @@
 #include	"acc.h"
+#include 	"clientlist.h"
 
 void mail_srv(int sockfd);
 int check_command_one(char *arg);
 int check_command_two(char *arg1, char *arg2);
 int check_command_three(char *arg1, char *arg2, char *arg3);
+void addClient(int sockfd);
 
 static int nthreads;
 pthread_mutex_t clifd_mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t clifd_cond = PTHREAD_COND_INITIALIZER;
-
-static struct client_list *head = NULL;
-static struct client_list *current = NULL;
 
 int main(int argc, char **argv) 
 {
@@ -73,7 +72,7 @@ void * thread_main(void *arg)
 			iget = 0;
 			Pthread_mutex_unlock(&clifd_mutex);
 			tptr[(int)arg].thread_count++;
-
+			addClient(connfd);
 			mail_srv(connfd);
 			Close(connfd);
 	}
@@ -121,7 +120,7 @@ int check_command_one(char *arg)
     else if (strcmp(str, "get_client_list") == 0)
         printf("get_client_list\n");
 
-	return;
+	return 0;
 }
 
 int check_command_two(char *arg1, char *arg2) 
@@ -136,7 +135,7 @@ int check_command_two(char *arg1, char *arg2)
     else if (strcmp(str, "get_mailbox") == 0)
         printf("get_mailbox %s\n", arg2);
 
-    return;
+    return 0;
 }
 
 int check_command_three(char *arg1, char *arg2, char *arg3) 
@@ -152,5 +151,27 @@ int check_command_three(char *arg1, char *arg2, char *arg3)
     else if (strcmp(str, "delete") == 0)
         printf("delete %s %s\n", arg2, arg3);
 
-    return;
+    return 0;
+}
+
+void addClient(int sockfd) 
+{
+	struct client newClient;
+	char buff[MAXLINE];
+	const char *ptr;
+	time_t rawtime;
+	struct tm *timeinfo;
+	socklen_t len;
+	struct sockaddr_in cliaddr;
+	Getpeername(sockfd, (SA *) &cliaddr, &len);
+	printf("%s\n", Inet_ntop(AF_INET, &cliaddr.sin_addr, buff, sizeof(buff)));
+	strcpy(newClient.client_name, "client");
+	time(&rawtime);
+	timeinfo = localtime(&rawtime);
+	strcpy(newClient.time_joined, asctime(timeinfo));
+	strcpy(newClient.ip_address, ptr);
+	newClient.ip_port = ntohs(cliaddr.sin_port);
+	newClient.email_counter = 0;
+	insertFirst(newClient);
+	printList();
 }

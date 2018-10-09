@@ -1,5 +1,5 @@
-mess.out: error.o wrapunix.o wrapsock.o wraplib.o wrapstdio.o mess.o readline.o writen.o signal.o wrappthread.o tcp_listen.o 
-	cc -o mess.out error.o wrapunix.o wrapsock.o wraplib.o wrapstdio.o mess.o readline.o writen.o signal.o wrappthread.o tcp_listen.o -lpthread
+mess.out: error.o wrapunix.o wrapsock.o wraplib.o wrapstdio.o mess.o readline.o writen.o signal.o wrappthread.o tcp_listen.o clientlist.o
+	cc -o mess.out error.o wrapunix.o wrapsock.o wraplib.o wrapstdio.o mess.o readline.o writen.o signal.o wrappthread.o tcp_listen.o clientlist.o -lpthread
 
 error.o: error.c acc.h
 	cc -c error.c
@@ -10,13 +10,16 @@ wrapunix.o: wrapunix.c acc.h
 wrapsock.o: wrapsock.c acc.h
 	cc -c wrapsock.c
 
+clientlist.o: clientlist.c clientlist.h acc.h
+	cc -c clientlist.c
+
 wraplib.o: wraplib.c acc.h
 	cc -c wraplib.c
 
 wrapstdio.o: wrapstdio.c acc.h
 	cc -c wrapstdio.c
 
-mess.o: mess.c acc.h
+mess.o: mess.c acc.h 
 	cc -c mess.c
 
 readline.o: readline.c acc.h

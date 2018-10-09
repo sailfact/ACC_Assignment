@@ -8,7 +8,7 @@ void printList()
     //start from the beginning
     while(ptr != NULL) 
     {
-        printf("[name = %s time = %d addr = %s port = %d count = %d]\n",
+        printf("[name = %s time = %s addr = %s port = %d count = %d]\n",
         ptr->client.client_name, 
         ptr->client.time_joined, 
         ptr->client.ip_address, 
@@ -67,7 +67,6 @@ int length()
 //find a link with given entry
 struct client_list* find(struct client entry) 
 {
-
     //start from the first link
     struct client_list* current = head;
 
@@ -83,7 +82,6 @@ struct client_list* find(struct client entry)
             return NULL;
         else //go to next_client link
             current = current->next_client;
-        }
     }      
         
     //if data found, return the current Link
@@ -91,7 +89,8 @@ struct client_list* find(struct client entry)
 }
 
 //delete a link with given entry
-struct client_list* delete(struct client entry) 
+struct client_list* deleteEntry(struct client entry) 
+{
     //start from the first link
     struct client_list* current = head;
     struct client_list* previous = NULL;

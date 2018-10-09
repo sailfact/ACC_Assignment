@@ -1,19 +1,19 @@
-#ifndef CLIENT_LIST_H
-#define CLIENT_LIST_H
 #include "acc.h"
 
 struct client {
     char            client_name[20];    /* name of client */
-    int             time_joined;        /* time client joined */
+    char            time_joined[25];    /* time client joined */
     char            ip_address[16];     /* IP address of the client */
     int             ip_port;            /* IP port number of the client */
     int             email_counter;      /* number of emails */
 };
 
 struct client_list {
-    struct client       client;
-    struct client_list   *next_client;
+    struct client           client;
+    struct client_list      *next_client;
 };
+
+static struct client_list *head = NULL;
 
 void printList();
 
@@ -32,5 +32,4 @@ int length();
 struct client_list* find(struct client entry);
 
 //delete a link with given entry
-struct client_list* delete(struct client entry);
-#endif
+struct client_list* deleteEntry(struct client entry);
