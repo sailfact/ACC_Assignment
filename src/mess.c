@@ -93,7 +93,8 @@ void mail_srv(int sockfd)
     {
 		if ( (n = Readline(sockfd, line, MAXLINE)) == 0)
 			return;		/* connection closed by other end */
-        scans = sscanf(line, "%s %s %s", arg1, arg2, arg2);
+
+		scans = sscanf(line, "%s %s %s", arg1, arg2, arg3);
 		printf("commands %d\n\targ1 = %s\n\targ2 = %s\n\targ3 = %s\n",scans, arg1, arg2, arg3);
         switch (scans) 
         {
