@@ -110,15 +110,12 @@ void mail_srv(int sockfd)
             default:
 			    snprintf(line, sizeof(line), "input error\n");
         }
-
-		n = strlen(line);
-		Writen(sockfd, line, n);
 	}
 }
 int check_command_one(int sockfd, char *arg) 
 {
 	int len = strlen(arg);
-    char str[sizeof(arg)+1];
+    char str[sizeof(arg)];
     for(int i = 0; i < len; i++)
             str[i] = tolower(arg[i]);
 
@@ -139,7 +136,7 @@ int check_command_one(int sockfd, char *arg)
 int check_command_two(int sockfd, char *arg1, char *arg2) 
 {
 	int len = strlen(arg1);
-    char str[sizeof(arg1)+1];
+    char str[sizeof(arg1)];
     for(int i = 0; i < len; i++)
             str[i] = tolower(arg1[i]);
 
@@ -161,7 +158,7 @@ int check_command_three(int sockfd, char *arg1, char *arg2, char *arg3)
 {
 	printf("cmd%s name%s id%s\n", arg1, arg2, arg3);
 	int len = strlen(arg1);
-    char str[sizeof(arg1)+1];
+    char str[sizeof(arg1)];
     for(int i = 0; i < len; i++)
             str[i] = tolower(arg1[i]);
         
@@ -203,11 +200,9 @@ void cmd_get_mailbox(int sockfd, char *name)
 
 }
 
-void cmd_quit(int sockfd)
+void cmd_quit(int sockfd) 
 {
-	printf("quittig...\n");
 	char line[MAXLINE];
-	snprintf(line, sizeof(line), "input error\n");
+	snprintf(line, sizeof(line), "bye\n");
 	Writen(sockfd, line, sizeof(line));
-	Close(sockfd);
 }
