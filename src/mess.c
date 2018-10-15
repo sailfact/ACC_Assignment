@@ -226,7 +226,7 @@ void cmd_delete(int sockfd, char *name, int id)
 
 void cmd_get_client_list(int sockfd)
 {
-	
+
 }
 
 void cmd_get_mailbox(int sockfd, char *name)
@@ -237,6 +237,6 @@ void cmd_get_mailbox(int sockfd, char *name)
 void cmd_quit(int sockfd) 
 {
 	char line[MAXLINE];
-	snprintf(line, sizeof(line), "bye\n");
+	snprintf(line, sizeof(line), "Bye\n");
 	Writen(sockfd, line, sizeof(line));
 }
