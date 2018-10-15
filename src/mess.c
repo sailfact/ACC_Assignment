@@ -16,6 +16,8 @@ void cmd_quit(int sockfd);
 static int nthreads;
 pthread_mutex_t clifd_mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t clifd_cond = PTHREAD_COND_INITIALIZER;
+pthread_mutex_t clilist_mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t clilist_cond = PTHREAD_COND_INITIALIZER;
 
 int main(int argc, char **argv) 
 {
@@ -156,7 +158,6 @@ int check_command_two(int sockfd, char *arg1, char *arg2)
 
 int check_command_three(int sockfd, char *arg1, char *arg2, char *arg3) 
 {
-	printf("cmd%s name%s id%s\n", arg1, arg2, arg3);
 	int len = strlen(arg1);
     char str[sizeof(arg1)];
     for(int i = 0; i < len; i++)
@@ -172,6 +173,7 @@ int check_command_three(int sockfd, char *arg1, char *arg2, char *arg3)
 	    printf("delete %s %s\n", arg2, arg3);
 		cmd_delete(sockfd, arg2, atoi(arg3));
 	}
+
     return 0;
 }
 
@@ -181,10 +183,9 @@ void cmd_make(int sockfd, char *name)
 	socklen_t 			len;
 	char 				buff[MAXLINE];
 	const char 			*ptr;
-
+	len = sizeof(cliaddr);
 	Getpeername(sockfd, (SA *) &cliaddr, &len);
 	Inet_ntop(AF_INET, &cliaddr.sin_addr, buff, sizeof(buff));
-	printf("%s\n", buff);
 	if (add_client(buff, ntohs(cliaddr.sin_port), name) == 0)
 	{
 
@@ -197,13 +198,12 @@ void cmd_make(int sockfd, char *name)
 
 int add_client(char *address, int port, char *name)
 {
-	printf("add_client\n");
 	time_t rawtime;
 	struct tm *timeinfo;
 	struct client newClient;
 	time(&rawtime);
 	timeinfo = localtime(&rawtime);
-	
+
 	strcpy(newClient.client_name, name);
 	strcpy(newClient.time_joined, asctime(timeinfo));
 	strcpy(newClient.ip_address, address);
@@ -231,7 +231,7 @@ void cmd_get_client_list(int sockfd)
 
 void cmd_get_mailbox(int sockfd, char *name)
 {
-	
+
 }
 
 void cmd_quit(int sockfd) 

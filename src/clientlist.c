@@ -8,7 +8,7 @@ void printList()
     //start from the beginning
     while(ptr != NULL) 
     {
-        printf("[name = %s time = %s addr = %s port = %d count = %d]\n",
+        printf("name = %s time = %s\naddr = %s port = %d\ncount = %d\n",
         ptr->client.client_name, 
         ptr->client.time_joined, 
         ptr->client.ip_address, 
@@ -36,7 +36,6 @@ void insertFirst(struct client data)
 //delete first item
 struct client_list* deleteFirst() 
 {
-
     //save reference to first link
     struct client_list *tempLink = head;
         

@@ -21,3 +21,22 @@ int main(int argc, char **argv)
 
 	exit(0);
 }
+
+void mail_cli (FILE *fp, int sockfd)  
+{
+    char	sendline[MAXLINE], recvline[MAXLINE];
+    printf("\nMESC>");
+	while ((void *) Fgets(sendline, MAXLINE, fp) != NULL) 
+	{
+		Writen(sockfd, sendline, strlen(sendline));
+
+		if (Readline(sockfd, recvline, MAXLINE) == 0)
+			err_quit("str_cli: server terminated prematurely");
+
+		Fputs(recvline, stdout);
+		if (strcmp(recvline, "bye\n") == 0)
+			return;
+		
+        printf("\nMESC>");
+	}
+}
