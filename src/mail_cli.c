@@ -12,7 +12,7 @@ void mail_cli (FILE *fp, int sockfd)
 			err_quit("str_cli: server terminated prematurely");
 
 		Fputs(recvline, stdout);
-		if (strcmp(recvline, "bye") == 0)
+		if (strcmp(recvline, "bye\n") == 0)
 			return;
 		
         printf("\nMESC>");

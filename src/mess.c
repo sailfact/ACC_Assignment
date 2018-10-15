@@ -95,8 +95,8 @@ void mail_srv(int sockfd)
 			return;		/* connection closed by other end */
 
 		scans = sscanf(line, "%s %s %s", arg1, arg2, arg3);
-		printf("commands %d\n\targ1 = %s\n\targ2 = %s\n\targ3 = %s\n",scans, arg1, arg2, arg3);
-        switch (scans) 
+		
+		switch (scans) 
         {
             case 1:
                 check_command_one(sockfd, arg1);
@@ -175,9 +175,43 @@ int check_command_three(int sockfd, char *arg1, char *arg2, char *arg3)
     return 0;
 }
 
-void cmd_make(int sockfd, char *name)
+void cmd_make(int sockfd, char *name) 
 {
+	struct sockaddr_in 	cliaddr;
+	socklen_t 			len;
+	char 				buff[MAXLINE];
+	const char 			*ptr;
 
+	Getpeername(sockfd, (SA *) &cliaddr, &len);
+	Inet_ntop(AF_INET, &cliaddr.sin_addr, buff, sizeof(buff));
+	printf("%s\n", buff);
+	if (add_client(buff, ntohs(cliaddr.sin_port), name) == 0)
+	{
+
+	}
+	else  
+	{
+
+	}
+}
+
+int add_client(char *address, int port, char *name)
+{
+	printf("add_client\n");
+	time_t rawtime;
+	struct tm *timeinfo;
+	struct client newClient;
+	time(&rawtime);
+	timeinfo = localtime(&rawtime);
+	
+	strcpy(newClient.client_name, name);
+	strcpy(newClient.time_joined, asctime(timeinfo));
+	strcpy(newClient.ip_address, address);
+	newClient.ip_port = port;
+	newClient.email_counter = 0;
+
+	insertFirst(newClient);
+	printList();
 }
 
 void cmd_read(int sockfd, char *name, int id)
@@ -197,7 +231,7 @@ void cmd_get_client_list(int sockfd)
 
 void cmd_get_mailbox(int sockfd, char *name)
 {
-
+	
 }
 
 void cmd_quit(int sockfd) 
