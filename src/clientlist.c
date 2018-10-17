@@ -1,21 +1,26 @@
 #include "clientlist.h"
 
 //display the list
-void printList() 
+const char * getList() 
 {
-    struct client_list *ptr = head;
-    
+    struct client_list  *ptr = head;
+    char                buffer[MAXLINE];
+    char                *list;
     //start from the beginning
     while(ptr != NULL) 
     {
-        printf("name = %s time = %s\naddr = %s port = %d\ncount = %d\n",
+        snprintf(buffer, sizeof(buffer), "[name = %s | time = %s | addr = %s | port = %d | email count = %d]\n", 
         ptr->client.client_name, 
-        ptr->client.time_joined, 
+        asctime(ptr->client.time_joined), 
         ptr->client.ip_address, 
         ptr->client.ip_port, 
         ptr->client.email_counter);
+        strcat(list, buffer);
+        // todo add string cat
         ptr = ptr->next_client;
     }
+
+    return list;
 }
 
 //insert link at the first location
@@ -100,6 +105,41 @@ struct client_list* deleteEntry(struct client entry)
 
     //navigate through list
     while(!strcmp(current->client.client_name,entry.client_name)) 
+    {
+        //if it is last struct client_list
+        if(current->next_client == NULL) 
+            return NULL;
+        else 
+        {
+            //store reference to current link
+            previous = current;
+            //move to next_client link
+            current = current->next_client;
+        }
+    }
+
+    //found a match, update the link
+    if(current == head)     //change first to point to next_client link
+        head = head->next_client;
+    else //bypass the current link
+        previous->next_client = current->next_client;  
+	
+    return current;
+}
+
+//delete a link with given name
+struct client_list* deleteName(char *name) 
+{
+    //start from the first link
+    struct client_list* current = head;
+    struct client_list* previous = NULL;
+        
+    //if list is empty
+    if(head == NULL) 
+        return NULL;
+
+    //navigate through list
+    while(!strcmp(current->client.client_name, name)) 
     {
         //if it is last struct client_list
         if(current->next_client == NULL) 

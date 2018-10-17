@@ -2,7 +2,7 @@
  * pthreads wrapper functions.
  */
 
-#include	"acc.h"
+#include	"wrappthread.h"
 
 void Pthread_create(pthread_t *tid, const pthread_attr_t *attr, void * (*func)(void *), void *arg)
 {

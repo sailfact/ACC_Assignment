@@ -13,6 +13,7 @@
 #include <netinet/in.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <sys/wait.h>
 #include <signal.h>
 #include <fcntl.h>
 #include <sys/select.h>
@@ -21,7 +22,7 @@
 
 #define	MAXLINE	4096
 #define	LISTENQ	1024
-#define	SERV_TCP_PORT	52001
+#define	SERV_TCP_PORT	61020
 #define TIMEOUT 20
 #define	SA	struct sockaddr
 #define	min(a,b)	((a) < (b) ? (a) : (b))

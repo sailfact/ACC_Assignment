@@ -1,23 +1,4 @@
-#include	"acc.h"
-#include 	"clientlist.h"
-
-void mail_srv(int);
-int check_command_one(int, char *);
-int check_command_two(int, char *, char *);
-int check_command_three(int, char *, char *, char *);
-void cmd_make(int sockfd, char *name);
-void cmd_read(int sockfd, char *name, int id);
-void cmd_delete(int sockfd, char *name, int id);
-void cmd_get_client_list(int sockfd);
-void cmd_get_mailbox(int sockfd, char *name);
-void cmd_quit(int sockfd);
-
-
-static int nthreads;
-pthread_mutex_t clifd_mutex = PTHREAD_MUTEX_INITIALIZER;
-pthread_cond_t clifd_cond = PTHREAD_COND_INITIALIZER;
-pthread_mutex_t clilist_mutex = PTHREAD_MUTEX_INITIALIZER;
-pthread_cond_t clilist_cond = PTHREAD_COND_INITIALIZER;
+#include	"mess.h"
 
 int main(int argc, char **argv) 
 {
@@ -182,36 +163,46 @@ void cmd_make(int sockfd, char *name)
 	struct sockaddr_in 	cliaddr;
 	socklen_t 			len;
 	char 				buff[MAXLINE];
+	char 				line[MAXLINE];
+
 	const char 			*ptr;
 	len = sizeof(cliaddr);
 	Getpeername(sockfd, (SA *) &cliaddr, &len);
 	Inet_ntop(AF_INET, &cliaddr.sin_addr, buff, sizeof(buff));
-	if (add_client(buff, ntohs(cliaddr.sin_port), name) == 0)
-	{
-
-	}
-	else  
-	{
-
-	}
+	add_client(buff, ntohs(cliaddr.sin_port), name);
+	make_mailbox(name);
+	snprintf(line, sizeof(line), "Client %s added.\n", name);
+	Writen(sockfd, line, sizeof(line));
 }
 
 int add_client(char *address, int port, char *name)
 {
-	time_t rawtime;
-	struct tm *timeinfo;
-	struct client newClient;
+	char 			line[MAXLINE];
+	time_t 			rawtime;
+	struct 			tm *timeinfo;
+	struct client 	newClient;
 	time(&rawtime);
-	timeinfo = localtime(&rawtime);
 
 	strcpy(newClient.client_name, name);
-	strcpy(newClient.time_joined, asctime(timeinfo));
+	newClient.time_joined = localtime(&rawtime);
 	strcpy(newClient.ip_address, address);
 	newClient.ip_port = port;
 	newClient.email_counter = 0;
 
+	Pthread_mutex_lock(&clilist_mutex);
 	insertFirst(newClient);
-	printList();
+	Pthread_mutex_unlock(&clilist_mutex);
+	printf("%s", getList());
+
+	return 0;
+}
+
+void make_mailbox(char * filename)
+{
+	struct stat st = {0};
+
+	if (stat(filename, &st) == -1)
+		mkdir(filename, 0777);
 }
 
 void cmd_read(int sockfd, char *name, int id)
@@ -236,7 +227,7 @@ void cmd_get_mailbox(int sockfd, char *name)
 
 void cmd_quit(int sockfd) 
 {
-	char line[MAXLINE];
+	char 		line[MAXLINE];
 	snprintf(line, sizeof(line), "Bye\n");
 	Writen(sockfd, line, sizeof(line));
 }

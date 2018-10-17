@@ -2,7 +2,8 @@
  * Standard I/O wrapper functions.
  */
 
-#include	"acc.h"
+#include	"wrapstdio.h"
+#include 	"error.h"
 
 void Fclose(FILE *fp)
 {

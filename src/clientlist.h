@@ -2,7 +2,7 @@
 
 struct client {
     char            client_name[20];    /* name of client */
-    char            time_joined[25];    /* time client joined */
+    struct tm       *time_joined;       /* time client joined */
     char            ip_address[16];     /* IP address of the client */
     int             ip_port;            /* IP port number of the client */
     int             email_counter;      /* number of emails */
@@ -15,7 +15,7 @@ struct client_list {
 
 static struct client_list *head = NULL;
 
-void printList();
+const char * getList();
 
 //insert link at the first location
 void insertFirst(struct client data);
@@ -33,3 +33,6 @@ struct client_list* find(struct client entry);
 
 //delete a link with given entry
 struct client_list* deleteEntry(struct client entry);
+
+//delete a link with given name
+struct client_list* deleteName(char *name);

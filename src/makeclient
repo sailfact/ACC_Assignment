@@ -1,34 +1,34 @@
 mesc.out: error.o wrapunix.o wrapsock.o wraplib.o wrapstdio.o mesc.o readline.o writen.o
 	cc -o mesc.out error.o wrapunix.o wrapsock.o wraplib.o wrapstdio.o mesc.o readline.o writen.o -lpthread
 
-error.o: error.c acc.h
+error.o: error.c error.h acc.h
 	cc -c error.c
 
-wrapunix.o: wrapunix.c acc.h
+wrapunix.o: wrapunix.c wrapunix.h acc.h
 	cc -c wrapunix.c
 
-wrapsock.o: wrapsock.c acc.h
+wrapsock.o: wrapsock.c wrapsock.h acc.h
 	cc -c wrapsock.c
 
-wraplib.o: wraplib.c acc.h
+wraplib.o: wraplib.c wraplib.h acc.h
 	cc -c wraplib.c
 
 wrapstdio.o: wrapstdio.c acc.h
 	cc -c wrapstdio.c
 
-mesc.o: mesc.c acc.h
+mesc.o: mesc.c mesc.h acc.h
 	cc -c mesc.c
 
-readline.o: readline.c acc.h
+readline.o: readline.c readline.h acc.h
 	cc -c readline.c
 
-writen.o: writen.c acc.h
+writen.o: writen.c writen.h acc.h
 	cc -c writen.c
 
-wrappthread.o: wrappthread.c acc.h
+wrappthread.o: wrappthread.c wrappthread.h acc.h
 	cc -c wrappthread.c -lpthread
 
-tcp_connect.o: tcp_connect.c acc.h
+tcp_connect.o: tcp_connect.c tcp_connect.h acc.h
 	cc -c tcp_connect.c -lpthread
 
 clean:
