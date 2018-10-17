@@ -29,16 +29,11 @@
 #define	max(a,b)	((a) > (b) ? (a) : (b))
 typedef	void	Sigfunc(int);
 
-enum status {
-    READ,
-    UNREAD
-};
-
 struct mailbox_info {
     int             email_id;           /* client id */
     char            sender_name[20];    /* senders name */
-    int             time;               /* time sent */
-    enum status     status;             /* mail status */
+    struct tm       *time;              /* time sent */
+    int             status;             /* mail status */
 };
 
 typedef struct {
