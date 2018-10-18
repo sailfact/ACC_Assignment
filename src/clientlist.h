@@ -15,7 +15,7 @@ struct client_list {
 
 static struct client_list *head = NULL;
 
-const char * getList();
+void getList(char *line);
 
 //insert link at the first location
 void insertFirst(struct client data);

@@ -1,11 +1,10 @@
 #include "clientlist.h"
 
 //display the list
-const char * getList() 
+void getList(char *line) 
 {
     struct client_list  *ptr = head;
     char                buffer[MAXLINE];
-    char                *list;
     //start from the beginning
     while(ptr != NULL) 
     {
@@ -15,12 +14,11 @@ const char * getList()
         ptr->client.ip_address, 
         ptr->client.ip_port, 
         ptr->client.email_counter);
-        strcat(list, buffer);
+        strncat(line, buffer, sizeof(buffer));
         // todo add string cat
+        
         ptr = ptr->next_client;
     }
-
-    return list;
 }
 
 //insert link at the first location

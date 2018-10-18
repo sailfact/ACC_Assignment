@@ -10,7 +10,7 @@ int main(int argc, char **argv)
 	if (argc == 3)
 		listenfd = Tcp_listen(NULL, argv[2], &addrlen);
 	else
-		err_quit("usage: mess <#threads> <#threads>");
+		err_quit("usage: mess <#threads> <port#>");
 	
 	cliaddr = Malloc(addrlen);
 
@@ -82,10 +82,10 @@ void mail_srv(int sockfd)
 		switch (scans) 
         {
             case 1:
-                check_command_one(sockfd, arg1);
+				check_command_one(sockfd, arg1);
                 break;
 			case 2:
-                check_command_two(sockfd, arg1, arg2);
+				check_command_two(sockfd, arg1, arg2);
                 break;
 			case 3:
                 check_command_three(sockfd, arg1, arg2, arg3);
@@ -97,11 +97,11 @@ void mail_srv(int sockfd)
 }
 int check_command_one(int sockfd, char *arg) 
 {
-	int len = strlen(arg);
+	int len = strlen(arg)+1;
     char str[sizeof(arg)];
     for(int i = 0; i < len; i++)
             str[i] = tolower(arg[i]);
-
+	printf("1\n");
     if (strcmp(str, "quit") == 0)
     {
 		printf("quit\n");
@@ -125,7 +125,6 @@ int check_command_two(int sockfd, char *arg1, char *arg2)
 
     if (strcmp(str, "make") == 0)
  	{
-	    printf("make %s\n", arg2);
 		cmd_make(sockfd, arg2);
 	}
     else if (strcmp(str, "get_mailbox") == 0)
@@ -170,9 +169,16 @@ void cmd_make(int sockfd, char *name)
 	Getpeername(sockfd, (SA *) &cliaddr, &len);
 	Inet_ntop(AF_INET, &cliaddr.sin_addr, buff, sizeof(buff));
 	add_client(buff, ntohs(cliaddr.sin_port), name);
-	make_mailbox(name);
-	snprintf(line, sizeof(line), "Client %s added.\n", name);
-	Writen(sockfd, line, sizeof(line));
+	if (make_mailbox(name) == 0)
+	{
+		snprintf(line, sizeof(line), "Client %s added.\n", name);
+		Writen(sockfd, line, sizeof(line));
+	}
+	else
+	{
+		snprintf(line, sizeof(line), "Client %s allready exists.\n", name);
+		Writen(sockfd, line, sizeof(line));
+	}
 }
 
 int add_client(char *address, int port, char *name)
@@ -182,7 +188,6 @@ int add_client(char *address, int port, char *name)
 	struct 			tm *timeinfo;
 	struct client 	newClient;
 	time(&rawtime);
-
 	strcpy(newClient.client_name, name);
 	newClient.time_joined = localtime(&rawtime);
 	strcpy(newClient.ip_address, address);
@@ -192,17 +197,21 @@ int add_client(char *address, int port, char *name)
 	Pthread_mutex_lock(&clilist_mutex);
 	insertFirst(newClient);
 	Pthread_mutex_unlock(&clilist_mutex);
-	printf("%s", getList());
 
 	return 0;
 }
 
-void make_mailbox(char * filename)
+int make_mailbox(char * filename)
 {
+	printf("make mailbox\n");
 	struct stat st = {0};
 
-	if (stat(filename, &st) == -1)
+	if (stat(filename, &st) == 0)
+		return 1;
+	else
 		mkdir(filename, 0777);
+	
+	return 0;
 }
 
 void cmd_read(int sockfd, char *name, int id)
@@ -217,7 +226,9 @@ void cmd_delete(int sockfd, char *name, int id)
 
 void cmd_get_client_list(int sockfd)
 {
-
+	char line[MAXLINE];
+	getList(line);
+	Writen(sockfd, line, sizeof(line));
 }
 
 void cmd_get_mailbox(int sockfd, char *name)

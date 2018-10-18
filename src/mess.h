@@ -20,7 +20,7 @@ void cmd_get_client_list(int sockfd);
 void cmd_get_mailbox(int sockfd, char *name);
 void cmd_quit(int sockfd);
 int add_client(char *address, int port, char *name);
-void make_mailbox(char * filename);
+int make_mailbox(char * filename);
 void thread_make(int i);
 void * thread_main(void *arg);
 
