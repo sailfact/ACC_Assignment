@@ -203,7 +203,6 @@ int add_client(char *address, int port, char *name)
 
 int make_mailbox(char * filename)
 {
-	printf("make mailbox\n");
 	struct stat st = {0};
 
 	if (stat(filename, &st) == 0)
