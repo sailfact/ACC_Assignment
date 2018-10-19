@@ -1,5 +1,6 @@
 /* include signal */
 #include	"acc.h"
+#include	"error.h"
 
 Sigfunc * signal(int signo, Sigfunc *func)
 {

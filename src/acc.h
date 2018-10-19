@@ -1,5 +1,3 @@
-#ifndef ACC_H
-#define ACC_H
 #include <stdio.h>
 #include <ctype.h>
 #include <stdlib.h>
@@ -12,38 +10,23 @@
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <sys/types.h>
+#include <sys/stat.h>
 #include <sys/socket.h>
+#include <sys/ioctl.h>
+#include <sys/time.h>
 #include <sys/wait.h>
 #include <signal.h>
 #include <fcntl.h>
 #include <sys/select.h>
 #include <pthread.h>
 #include <stdarg.h>
+#include <linux/limits.h>
 
 #define	MAXLINE	4096
 #define	LISTENQ	1024
-#define	SERV_TCP_PORT	61020
+#define	SERV_TCP_PORT 61020
 #define TIMEOUT 20
 #define	SA	struct sockaddr
 #define	min(a,b)	((a) < (b) ? (a) : (b))
 #define	max(a,b)	((a) > (b) ? (a) : (b))
 typedef	void	Sigfunc(int);
-
-struct mailbox_info {
-    int             email_id;           /* client id */
-    char            sender_name[20];    /* senders name */
-    struct tm       *time;              /* time sent */
-    int             status;             /* mail status */
-};
-
-typedef struct {
-    pthread_t       thread_tid;     /* thread ID */
-    long            thread_count;   /* # connections handled */
-} Thread;
-
-Thread *tptr;
-#define MAXNCLI 32      /* the maximum amount of clients for this program!!! */
-int             clifd[MAXNCLI], iget, iput;
-pthread_mutex_t clifd_mutex;
-pthread_cond_t  clifd_cond;
-#endif

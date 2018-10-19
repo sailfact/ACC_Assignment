@@ -1,11 +1,11 @@
 #include "acc.h"
 
 struct client {
-    char            client_name[20];    /* name of client */
-    struct tm       *time_joined;       /* time client joined */
-    char            ip_address[16];     /* IP address of the client */
-    int             ip_port;            /* IP port number of the client */
-    int             email_counter;      /* number of emails */
+    char                client_name[20];    /* name of client */
+    struct tm           *time_joined;       /* time client joined */
+    char                ip_address[16];     /* IP address of the client */
+    int                 ip_port;            /* IP port number of the client */
+    int                 email_counter;      /* number of emails */
 };
 
 struct client_list {

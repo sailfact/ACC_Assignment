@@ -74,7 +74,7 @@ void mail_srv(int sockfd)
     int scans;
 	while (1)
     {
-		if ( (n = Readline(sockfd, line, MAXLINE)) == 0)
+		if ( (n = Read(sockfd, line, MAXLINE)) == 0)
 			return;		/* connection closed by other end */
 
 		if ((scans = sscanf(line, "%s %s %s", arg1, arg2, arg3)) < 4)
@@ -119,16 +119,18 @@ int check_command_one(int sockfd, char *arg)
 	
 	if (strcmp(str, "quit") == 0)
     {
-		snprintf(line, sizeof(line), "Bye\n");
+		cmd_quit(sockfd);
 	}
     else if (strcmp(str, "list") == 0)
     {
-		getList(line);
+		cmd_list(sockfd);
 	}
-
-	n = strlen(line);
-	printf("size = %d line = %s\n", n, line);
-	Writen(sockfd, line, n);
+	else
+	{
+		snprintf(line, sizeof(line), "input error\n");
+		n = strlen(line);
+		Writen(sockfd, line, n);
+	}
 
 	return 0;
 }
@@ -235,14 +237,71 @@ int make_mailbox(char * filename)
 	return 0;
 }
 
+void cmd_quit(int sockfd)
+{
+	char line[MAXLINE];
+	snprintf(line, sizeof(line), "Bye\n");
+	Writen(sockfd, line, strlen(line));
+}
+
+void cmd_list(int sockfd)
+{
+	char line[MAXLINE];
+	getList(line);
+	printf("line = %s\n", line);
+	Writen(sockfd, line, strlen(line));
+}
+
 void cmd_read(int sockfd, char *name, int id)
 {
+	// send file /name/id
+	char path[PATH_MAX], line[MAXLINE];
+	snprintf(path, sizeof(path), "%s/%d", name, id);
+	char * buffer = 0;
+	long length;
+	FILE * f = fopen (path, "rb");
 
+	if (f)
+	{
+		fseek (f, 0, SEEK_END);
+		length = ftell (f);
+		fseek (f, 0, SEEK_SET);
+		buffer = malloc (length);
+		if (buffer)
+		{
+			fread (buffer, 1, length, f);
+		}
+		fclose (f);
+	}
+
+	if (buffer)
+	{
+		snprintf(line, sizeof(line), "%s", buffer);
+	}
+	else
+	{
+		snprintf(line, sizeof(line), "error retrieving file.\n");
+	}
+	
+	Writen(sockfd, line, strlen(line));
 }
 
 void cmd_delete(int sockfd, char *name, int id)
 {
+	// delete rile /name/id
+	char path[PATH_MAX], line[MAXLINE];
+	snprintf(path, sizeof(path), "%s/%d", name, id);
 
+	if (remove(path))
+	{
+		snprintf(line, sizeof(line), "%s file deleted successfully.\n", path);
+	}
+  	else
+  	{
+		snprintf(line, sizeof(line), "Unable to delete the file\n");
+  	}
+
+	Writen(sockfd, line, strlen(line));
 }
 
 void cmd_send(int sockfd, char *name)

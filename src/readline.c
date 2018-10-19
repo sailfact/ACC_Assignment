@@ -9,15 +9,16 @@ static ssize_t my_read(int fd, char *ptr)
 
 	if (read_cnt <= 0) 
 	{
-again:
-		if ( (read_cnt = read(fd, read_buf, sizeof(read_buf))) < 0) 
+		while ((read_cnt = read(fd, read_buf, sizeof(read_buf))) < 0) 
 		{
 			if (errno == EINTR)
-				goto again;
-			return(-1);
-		} 
-		else if (read_cnt == 0)
+				continue;
+			else
+				return(-1);
+		}
+		if (read_cnt == 0)
 			return(0);
+		
 		read_ptr = read_buf;
 	}
 
@@ -63,4 +64,36 @@ ssize_t Readline(int fd, void *ptr, size_t maxlen)
 	if ( (n = readline(fd, ptr, maxlen)) < 0)
 		err_sys("readline error");
 	return(n);
+}
+
+ssize_t readn(int fd, void *vptr, size_t n)
+{
+	size_t  nleft;
+	ssize_t nread;
+	char 	*ptr;
+	ptr = vptr;
+	nleft = n;
+	while (nleft > 0)
+	{
+		if ((nread = read(fd, ptr, nleft)) < 0)
+		{
+			if (errno == EINTR)	// if interrupted
+				nread = 0;	// call read again
+			else 
+				return (-1);
+		}
+		else if (nread == 0)
+			break;	//EOF
+		nleft -= nread;
+		ptr += nread;
+	}
+	return (n-nleft); // returns >= 0
+}
+
+ssize_t Readn(int fd, void *ptr, size_t nbytes)
+{
+	ssize_t n;
+	if ((n =  readn(fd, ptr, nbytes)) < 0)
+		err_sys("readn error");
+	return (n);
 }

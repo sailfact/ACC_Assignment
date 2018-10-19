@@ -40,8 +40,7 @@ void mail_cli (FILE *fp, int sockfd)
 			printf("finished sending msg\n");
 		}
 		
-		printf("client waiting\n");
-		if (Readline(sockfd, recvline, MAXLINE) == 0)
+		if (Read(sockfd, recvline, MAXLINE) == 0)
 			err_quit("str_cli: server terminated prematurely");
 
 		Fputs(recvline, stdout);
