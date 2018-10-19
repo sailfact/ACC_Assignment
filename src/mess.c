@@ -105,7 +105,6 @@ void mail_srv(int sockfd)
 			n = strlen(line);
 			Writen(sockfd, line, n);
 		}
-		line = "";
 	}
 }
 
