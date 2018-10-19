@@ -13,16 +13,14 @@ void mail_srv(int);
 int check_command_one(int, char *);
 int check_command_two(int, char *, char *);
 int check_command_three(int, char *, char *, char *);
-void cmd_make(int sockfd, char *name);
-void cmd_read(int sockfd, char *name, int id);
-void cmd_delete(int sockfd, char *name, int id);
-void cmd_get_client_list(int sockfd);
-void cmd_get_mailbox(int sockfd, char *name);
-void cmd_quit(int sockfd);
-int add_client(char *address, int port, char *name);
-int make_mailbox(char * filename);
-void thread_make(int i);
-void * thread_main(void *arg);
+void cmd_make(int, char *);
+void cmd_read(int, char *, int);
+void cmd_delete(int, char *, int);
+void cmd_get_mailbox(int, char *);
+int add_client(char *, int, char *);
+int make_mailbox(char *);
+void thread_make(int);
+void * thread_main(void *);
 
 
 static int nthreads;

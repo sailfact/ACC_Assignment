@@ -5,10 +5,11 @@ void getList(char *line)
 {
     struct client_list  *ptr = head;
     char                buffer[MAXLINE];
+    
     //start from the beginning
     while(ptr != NULL) 
     {
-        snprintf(buffer, sizeof(buffer), "[name = %s | time = %s | addr = %s | port = %d | email count = %d]\n", 
+        snprintf(buffer, sizeof(buffer), "name = %s time joined = %s addr = %s port = %d email count = %d\n", 
         ptr->client.client_name, 
         asctime(ptr->client.time_joined), 
         ptr->client.ip_address, 

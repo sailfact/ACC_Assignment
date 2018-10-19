@@ -72,46 +72,64 @@ void mail_srv(int sockfd)
 	ssize_t		n;
 	char		line[MAXLINE];
     int scans;
-	for ( ; ; ) 
+	while (1)
     {
 		if ( (n = Readline(sockfd, line, MAXLINE)) == 0)
 			return;		/* connection closed by other end */
 
-		scans = sscanf(line, "%s %s %s", arg1, arg2, arg3);
-		
-		switch (scans) 
-        {
-            case 1:
-				check_command_one(sockfd, arg1);
-                break;
-			case 2:
-				check_command_two(sockfd, arg1, arg2);
-                break;
-			case 3:
-                check_command_three(sockfd, arg1, arg2, arg3);
-                break;            
-            default:
-			    snprintf(line, sizeof(line), "input error\n");
-        }
+		if ((scans = sscanf(line, "%s %s %s", arg1, arg2, arg3)) < 4)
+		{
+			switch (scans) 
+			{
+				case 1:
+					if (check_command_one(sockfd, arg1) < 0) 
+						fprintf(stderr, "check cmd one failed : <%s>", arg1);
+					break;
+				case 2:
+					if (check_command_two(sockfd, arg1, arg2) < 0) 
+						fprintf(stderr, "check cmd two failed : <%s> <%s>", arg1, arg2);
+					break;
+				case 3:
+					if (check_command_three(sockfd, arg1, arg2, arg3) < 0)
+						fprintf(stderr, "check cmd one failed : <%s> <%s> <%s>", arg1, arg2, arg3);
+					break;    
+				default:     
+					snprintf(line, sizeof(line), "input error\n");   
+					n = strlen(line);
+					Writen(sockfd, line, n);
+			}
+		} 
+		else
+		{
+			snprintf(line, sizeof(line), "input error\n");
+			n = strlen(line);
+			Writen(sockfd, line, n);
+		}
+		line = "";
 	}
 }
+
 int check_command_one(int sockfd, char *arg) 
 {
-	int len = strlen(arg)+1;
+	ssize_t		n;
+	char		line[MAXLINE];
+	int len = strlen(arg);
     char str[sizeof(arg)];
     for(int i = 0; i < len; i++)
             str[i] = tolower(arg[i]);
-	printf("1\n");
-    if (strcmp(str, "quit") == 0)
+	
+	if (strcmp(str, "quit") == 0)
     {
-		printf("quit\n");
-		cmd_quit(sockfd);
+		snprintf(line, sizeof(line), "Bye\n");
 	}
-    else if (strcmp(str, "get_client_list") == 0)
+    else if (strcmp(str, "list") == 0)
     {
-		printf("get_client_list\n");
-		cmd_get_client_list(sockfd);
+		getList(line);
 	}
+
+	n = strlen(line);
+	printf("size = %d line = %s\n", n, line);
+	Writen(sockfd, line, n);
 
 	return 0;
 }
@@ -121,7 +139,7 @@ int check_command_two(int sockfd, char *arg1, char *arg2)
 	int len = strlen(arg1);
     char str[sizeof(arg1)];
     for(int i = 0; i < len; i++)
-            str[i] = tolower(arg1[i]);
+        str[i] = tolower(arg1[i]);
 
     if (strcmp(str, "make") == 0)
  	{
@@ -129,8 +147,7 @@ int check_command_two(int sockfd, char *arg1, char *arg2)
 	}
     else if (strcmp(str, "get_mailbox") == 0)
 	{
-        printf("get_mailbox %s\n", arg2);
-		cmd_get_mailbox(sockfd, arg2);
+        cmd_get_mailbox(sockfd, arg2);
 	}
 
     return 0;
@@ -162,7 +179,8 @@ void cmd_make(int sockfd, char *name)
 	struct sockaddr_in 	cliaddr;
 	socklen_t 			len;
 	char 				buff[MAXLINE];
-	char 				line[MAXLINE];
+	ssize_t				n;
+	char				line[MAXLINE];
 
 	const char 			*ptr;
 	len = sizeof(cliaddr);
@@ -172,13 +190,14 @@ void cmd_make(int sockfd, char *name)
 	if (make_mailbox(name) == 0)
 	{
 		snprintf(line, sizeof(line), "Client %s added.\n", name);
-		Writen(sockfd, line, sizeof(line));
 	}
 	else
 	{
-		snprintf(line, sizeof(line), "Client %s allready exists.\n", name);
-		Writen(sockfd, line, sizeof(line));
+		snprintf(line, sizeof(line), "Client %s all ready exists.\n", name);
 	}
+
+	n = strlen(line);
+	Writen(sockfd, line, n);
 }
 
 int add_client(char *address, int port, char *name)
@@ -223,21 +242,7 @@ void cmd_delete(int sockfd, char *name, int id)
 
 }
 
-void cmd_get_client_list(int sockfd)
-{
-	char line[MAXLINE];
-	getList(line);
-	Writen(sockfd, line, sizeof(line));
-}
-
 void cmd_get_mailbox(int sockfd, char *name)
 {
 
-}
-
-void cmd_quit(int sockfd) 
-{
-	char 		line[MAXLINE];
-	snprintf(line, sizeof(line), "Bye\n");
-	Writen(sockfd, line, sizeof(line));
 }

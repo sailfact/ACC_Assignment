@@ -1,41 +1,41 @@
 mess.out: error.o wrapunix.o wrapsock.o wraplib.o wrapstdio.o mess.o readline.o writen.o signal.o wrappthread.o tcp_listen.o clientlist.o
-	cc -o mess.out error.o wrapunix.o wrapsock.o wraplib.o wrapstdio.o mess.o readline.o writen.o signal.o wrappthread.o tcp_listen.o clientlist.o -lpthread
+	gcc -o mess.out error.o wrapunix.o wrapsock.o wraplib.o wrapstdio.o mess.o readline.o writen.o signal.o wrappthread.o tcp_listen.o clientlist.o -lpthread
 
 error.o: error.c error.h acc.h
-	cc -c error.c
+	gcc -c error.c
 
 wrapunix.o: wrapunix.c wrapunix.h acc.h
-	cc -c wrapunix.c
+	gcc -c wrapunix.c
 
 wrapsock.o: wrapsock.c wrapsock.h acc.h
-	cc -c wrapsock.c
+	gcc -c wrapsock.c
 
 clientlist.o: clientlist.c clientlist.h acc.h
-	cc -c clientlist.c
+	gcc -c clientlist.c
 
 wraplib.o: wraplib.c wraplib.h acc.h
-	cc -c wraplib.c
+	gcc -c wraplib.c
 
 wrapstdio.o: wrapstdio.c acc.h
-	cc -c wrapstdio.c
+	gcc -c wrapstdio.c
 
 mess.o: mess.c mess.h acc.h 
-	cc -c mess.c
+	gcc -c mess.c
 
 readline.o: readline.c readline.h acc.h
-	cc -c readline.c
+	gcc -c readline.c
 
 writen.o: writen.c writen.h acc.h
-	cc -c writen.c
+	gcc -c writen.c
 
 signal.o: signal.c acc.h
-	cc -c signal.c
+	gcc -c signal.c
 
 wrappthread.o: wrappthread.c wrappthread.h acc.h
-	cc -c wrappthread.c -lpthread
+	gcc -c wrappthread.c -lpthread
 
 tcp_listen.o: tcp_listen.c tcp_listen.h acc.h
-	cc -c tcp_listen.c
+	gcc -c tcp_listen.c
 
 clean:
 	rm -rf *.o *~ mess.out
