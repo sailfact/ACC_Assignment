@@ -10,13 +10,6 @@ int main(int argc, char **argv)
 
 	sockfd = Tcp_connect(argv[1], argv[2]);//Socket(AF_INET, SOCK_STREAM, 0);
 
-	// bzero(&servaddr, sizeof(servaddr));
-	// servaddr.sin_family = AF_INET;
-	// servaddr.sin_port = htons(atoi(argv[2]));
-	// Inet_pton(AF_INET, argv[1], &servaddr.sin_addr);
-
-	// Connect(sockfd, (SA *) &servaddr, sizeof(servaddr));
-
 	mail_cli(stdin, sockfd);		/* do it all */
 
 	exit(0);
