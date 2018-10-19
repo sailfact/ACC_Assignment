@@ -10,3 +10,4 @@
 #include    "tcp_connect.h"
 
 void mail_cli (FILE *fp, int sockfd);
+void sendMsg(FILE *fp, int sockfd);

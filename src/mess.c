@@ -148,6 +148,10 @@ int check_command_two(int sockfd, char *arg1, char *arg2)
 	{
         cmd_get_mailbox(sockfd, arg2);
 	}
+	else if(strcmp(str, "send") == 0)
+	{
+		cmd_send(sockfd, arg2);
+	}
 
     return 0;
 }
@@ -239,6 +243,19 @@ void cmd_read(int sockfd, char *name, int id)
 void cmd_delete(int sockfd, char *name, int id)
 {
 
+}
+
+void cmd_send(int sockfd, char *name)
+{
+	char message[MAXLINE], line[MAXLINE];
+	ssize_t n;
+	if (Readline(sockfd, message, MAXLINE) == 0)	// wait for the message
+		return;		// other end closed
+
+	printf("%s\n", message);
+	snprintf(line, sizeof(line), "Message received\n");
+	n = strlen(line);
+	Writen(sockfd, line, n);
 }
 
 void cmd_get_mailbox(int sockfd, char *name)

@@ -6,16 +6,16 @@ int main(int argc, char **argv)
 	struct sockaddr_in	servaddr;
 
 	if (argc != 3)
-		err_quit("usage: tcpcli <IPaddress> <port number>");
+		err_quit("usage: mesc.out <hostname/IPaddress> <service/port#>");
 
-	sockfd = Socket(AF_INET, SOCK_STREAM, 0);
+	sockfd = Tcp_connect(argv[1], argv[2]);//Socket(AF_INET, SOCK_STREAM, 0);
 
-	bzero(&servaddr, sizeof(servaddr));
-	servaddr.sin_family = AF_INET;
-	servaddr.sin_port = htons(atoi(argv[2]));
-	Inet_pton(AF_INET, argv[1], &servaddr.sin_addr);
+	// bzero(&servaddr, sizeof(servaddr));
+	// servaddr.sin_family = AF_INET;
+	// servaddr.sin_port = htons(atoi(argv[2]));
+	// Inet_pton(AF_INET, argv[1], &servaddr.sin_addr);
 
-	Connect(sockfd, (SA *) &servaddr, sizeof(servaddr));
+	// Connect(sockfd, (SA *) &servaddr, sizeof(servaddr));
 
 	mail_cli(stdin, sockfd);		/* do it all */
 
@@ -24,12 +24,23 @@ int main(int argc, char **argv)
 
 void mail_cli (FILE *fp, int sockfd)  
 {
-    char	sendline[MAXLINE], recvline[MAXLINE];
+    char	sendline[MAXLINE], recvline[MAXLINE], arg[20];
     printf("\nMESC>");
 	while ((void *) Fgets(sendline, MAXLINE, fp) != NULL) 
 	{
-		Writen(sockfd, sendline, strlen(sendline));
+		sscanf(sendline, "%s", arg);
+		
+		
 
+		Writen(sockfd, sendline, strlen(sendline));
+		
+		if (strcmp(arg, "send") == 0)
+		{
+			sendMsg(fp,sockfd);
+			printf("finished sending msg\n");
+		}
+		
+		printf("client waiting\n");
 		if (Readline(sockfd, recvline, MAXLINE) == 0)
 			err_quit("str_cli: server terminated prematurely");
 
@@ -38,5 +49,17 @@ void mail_cli (FILE *fp, int sockfd)
 			return;
 		
         printf("\nMESC>");
+	}
+}
+
+void sendMsg(FILE *fp, int sockfd)
+{
+	sleep(1);	// to make sure server is ready to receive the message
+	char	message[MAXLINE];
+	printf("\nEnter MSG>>");
+	while ((void *) Fgets(message, MAXLINE, fp) != NULL)
+	{
+		Writen(sockfd, message, strlen(message));
+		return;
 	}
 }
