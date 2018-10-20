@@ -1,5 +1,5 @@
-mesc.out: error.o wrapunix.o wrapsock.o wraplib.o wrapstdio.o mesc.o readline.o writen.o tcp_connect.o
-	gcc -o mesc.out error.o wrapunix.o wrapsock.o wraplib.o wrapstdio.o mesc.o readline.o writen.o tcp_connect.o -lpthread
+mesc.out: error.o wrapunix.o wrapsock.o wraplib.o wrapstdio.o mesc.o readline.o writen.o wrappthread.o tcp_connect.o
+	gcc -o mesc.out error.o wrapunix.o wrapsock.o wraplib.o wrapstdio.o mesc.o readline.o writen.o wrappthread.o tcp_connect.o -lpthread
 
 error.o: error.c error.h acc.h
 	gcc -c error.c
@@ -20,7 +20,7 @@ mesc.o: mesc.c mesc.h acc.h
 	gcc -c mesc.c
 
 readline.o: readline.c readline.h acc.h
-	gcc -c readline.c
+	gcc -c readline.c -lpthread
 
 writen.o: writen.c writen.h acc.h
 	gcc -c writen.c

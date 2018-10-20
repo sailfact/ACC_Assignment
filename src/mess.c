@@ -74,7 +74,7 @@ void mail_srv(int sockfd)
     int scans;
 	while (1)
     {
-		if ( (n = Read(sockfd, line, MAXLINE)) == 0)
+		if ( (n = Readline(sockfd, line, MAXLINE)) == 0)
 			return;		/* connection closed by other end */
 
 		if ((scans = sscanf(line, "%s %s %s", arg1, arg2, arg3)) < 4)
@@ -105,6 +105,7 @@ void mail_srv(int sockfd)
 			n = strlen(line);
 			Writen(sockfd, line, n);
 		}
+		bzero(line, MAXLINE);
 	}
 }
 
@@ -121,7 +122,7 @@ int check_command_one(int sockfd, char *arg)
     {
 		cmd_quit(sockfd);
 	}
-    else if (strcmp(str, "list") == 0)
+    else if (strcmp(str, "get_client_list") == 0)
     {
 		cmd_list(sockfd);
 	}
@@ -131,7 +132,7 @@ int check_command_one(int sockfd, char *arg)
 		n = strlen(line);
 		Writen(sockfd, line, n);
 	}
-
+	bzero(line, MAXLINE);
 	return 0;
 }
 
@@ -146,9 +147,9 @@ int check_command_two(int sockfd, char *arg1, char *arg2)
  	{
 		cmd_make(sockfd, arg2);
 	}
-    else if (strcmp(str, "get_mailbox") == 0)
+    else if (strcmp(str, "mailbox") == 0)
 	{
-        cmd_get_mailbox(sockfd, arg2);
+        cmd_mailbox(sockfd, arg2);
 	}
 	else if(strcmp(str, "send") == 0)
 	{
@@ -203,6 +204,7 @@ void cmd_make(int sockfd, char *name)
 
 	n = strlen(line);
 	Writen(sockfd, line, n);
+	bzero(line, MAXLINE);
 }
 
 int add_client(char *address, int port, char *name)
@@ -242,14 +244,15 @@ void cmd_quit(int sockfd)
 	char line[MAXLINE];
 	snprintf(line, sizeof(line), "Bye\n");
 	Writen(sockfd, line, strlen(line));
+	bzero(line, MAXLINE);
 }
 
 void cmd_list(int sockfd)
 {
 	char line[MAXLINE];
 	getList(line);
-	printf("line = %s\n", line);
 	Writen(sockfd, line, strlen(line));
+	bzero(line, MAXLINE);
 }
 
 void cmd_read(int sockfd, char *name, int id)
@@ -284,6 +287,7 @@ void cmd_read(int sockfd, char *name, int id)
 	}
 	
 	Writen(sockfd, line, strlen(line));
+	bzero(line, MAXLINE);
 }
 
 void cmd_delete(int sockfd, char *name, int id)
@@ -302,6 +306,7 @@ void cmd_delete(int sockfd, char *name, int id)
   	}
 
 	Writen(sockfd, line, strlen(line));
+	bzero(line, MAXLINE);
 }
 
 void cmd_send(int sockfd, char *name)
@@ -315,9 +320,32 @@ void cmd_send(int sockfd, char *name)
 	snprintf(line, sizeof(line), "Message received\n");
 	n = strlen(line);
 	Writen(sockfd, line, n);
+	bzero(line, MAXLINE);
 }
 
-void cmd_get_mailbox(int sockfd, char *name)
+void cmd_mailbox(int sockfd, char *name)
 {
+	char line[MAXLINE], buff[MAXLINE];
+	char curdir[20];
+	ssize_t n;
+	struct dirent *de;
+	DIR *dr = opendir(name);
+	if (dr != NULL)
+	{
+		snprintf(line, sizeof(line), "name %s\n", name);
+		while ((de = readdir(dr)) != NULL)
+		{
+			snprintf(buff, sizeof(buff), "%s\n", de->d_name);
+			strncat(line, buff, sizeof(buff));
+		}
+	}
+	else
+		snprintf(line, sizeof(line), "Message received\n");
+	closedir(dr);
 
+	printf("%s", line);
+
+	n = strlen(line);
+	Writen(sockfd, line, n);
+	bzero(line, MAXLINE);
 }

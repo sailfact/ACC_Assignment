@@ -23,7 +23,7 @@ mess.o: mess.c mess.h acc.h
 	gcc -c mess.c
 
 readline.o: readline.c readline.h acc.h
-	gcc -c readline.c
+	gcc -c readline.c -lpthread
 
 writen.o: writen.c writen.h acc.h
 	gcc -c writen.c

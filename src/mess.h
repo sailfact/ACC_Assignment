@@ -17,7 +17,7 @@ void cmd_make(int, char *);
 void cmd_read(int, char *, int);
 void cmd_delete(int, char *, int);
 void cmd_send(int, char *);
-void cmd_get_mailbox(int, char *);
+void cmd_mailbox(int, char *);
 void cmd_quit(int);
 void cmd_list(int);
 int add_client(char *, int, char *);

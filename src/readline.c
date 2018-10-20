@@ -1,29 +1,35 @@
 /* include readline */
 #include	"readline.h"
 
-static ssize_t my_read(int fd, char *ptr)
-{
-	static int	read_cnt = 0;
-	static char	*read_ptr;
-	static char	read_buf[MAXLINE];
+static pthread_key_t	rl_key;
+static pthread_once_t	rl_once = PTHREAD_ONCE_INIT;
 
-	if (read_cnt <= 0) 
-	{
-		while ((read_cnt = read(fd, read_buf, sizeof(read_buf))) < 0) 
-		{
+static void readline_destructor(void *ptr)
+{
+	free(ptr);
+}
+
+static void readline_once(void)
+{
+	Pthread_key_create(&rl_key, readline_destructor);
+}
+
+/* include readline2 */
+static ssize_t my_read(Rline *tsd, int fd, char *ptr)
+{
+	if (tsd->rl_cnt <= 0) {
+		while ( (tsd->rl_cnt = read(fd, tsd->rl_buf, MAXLINE)) < 0) {
 			if (errno == EINTR)
 				continue;
-			else
-				return(-1);
+			return(-1);
 		}
-		if (read_cnt == 0)
+		if (tsd->rl_cnt == 0)
 			return(0);
-		
-		read_ptr = read_buf;
+		tsd->rl_bufptr = tsd->rl_buf;
 	}
 
-	read_cnt--;
-	*ptr = *read_ptr++;
+	tsd->rl_cnt--;
+	*ptr = *tsd->rl_bufptr++;
 	return(1);
 }
 
@@ -31,31 +37,33 @@ ssize_t readline(int fd, void *vptr, size_t maxlen)
 {
 	int		n, rc;
 	char	c, *ptr;
+	Rline	*tsd;
+
+	Pthread_once(&rl_once, readline_once);
+	if ( (tsd = pthread_getspecific(rl_key)) == NULL) {
+		tsd = (Rline *) Calloc(1, sizeof(Rline));   /* init to 0 */
+		Pthread_setspecific(rl_key, tsd);
+	}
 
 	ptr = vptr;
-	for (n = 1; n < maxlen; n++) 
-	{
-		if ( (rc = my_read(fd, &c)) == 1) 
-		{
+	for (n = 1; n < maxlen; n++) {
+		if ( (rc = my_read(tsd, fd, &c)) == 1) {
 			*ptr++ = c;
 			if (c == '\n')
-				break;	/* newline is stored, like fgets() */
-		} 
-		else if (rc == 0) 
-		{
+				break;
+		} else if (rc == 0) {
 			if (n == 1)
 				return(0);	/* EOF, no data read */
 			else
 				break;		/* EOF, some data was read */
-		} 
-		else
+		} else
 			return(-1);		/* error, errno set by read() */
 	}
 
-	*ptr = 0;	/* null terminate like fgets() */
+	*ptr = 0;
 	return(n);
 }
-/* end readline */
+/* end readline2 */
 
 ssize_t Readline(int fd, void *ptr, size_t maxlen)
 {
@@ -64,36 +72,4 @@ ssize_t Readline(int fd, void *ptr, size_t maxlen)
 	if ( (n = readline(fd, ptr, maxlen)) < 0)
 		err_sys("readline error");
 	return(n);
-}
-
-ssize_t readn(int fd, void *vptr, size_t n)
-{
-	size_t  nleft;
-	ssize_t nread;
-	char 	*ptr;
-	ptr = vptr;
-	nleft = n;
-	while (nleft > 0)
-	{
-		if ((nread = read(fd, ptr, nleft)) < 0)
-		{
-			if (errno == EINTR)	// if interrupted
-				nread = 0;	// call read again
-			else 
-				return (-1);
-		}
-		else if (nread == 0)
-			break;	//EOF
-		nleft -= nread;
-		ptr += nread;
-	}
-	return (n-nleft); // returns >= 0
-}
-
-ssize_t Readn(int fd, void *ptr, size_t nbytes)
-{
-	ssize_t n;
-	if ((n =  readn(fd, ptr, nbytes)) < 0)
-		err_sys("readn error");
-	return (n);
 }

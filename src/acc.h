@@ -21,6 +21,7 @@
 #include <pthread.h>
 #include <stdarg.h>
 #include <linux/limits.h>
+#include <dirent.h>
 
 #define	MAXLINE	4096
 #define	LISTENQ	1024
