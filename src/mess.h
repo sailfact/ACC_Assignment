@@ -17,6 +17,7 @@ void cmd_make(int, char *);
 void cmd_read(int, char *, int);
 void cmd_delete(int, char *, int);
 void cmd_send(int, char *);
+void writeFile(char *name, char *from, int id, char *msg);
 void cmd_mailbox(int, char *);
 void cmd_quit(int);
 void cmd_list(int);

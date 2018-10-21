@@ -311,16 +311,61 @@ void cmd_delete(int sockfd, char *name, int id)
 
 void cmd_send(int sockfd, char *name)
 {
-	char message[MAXLINE], line[MAXLINE];
-	ssize_t n;
+	char 				message[MAXLINE], line[MAXLINE], buff[MAXLINE];
+	struct sockaddr_in 	cliaddr;
+	socklen_t 			len;
+	struct client 		curClient;
+	struct client_list 	*current;
+	ssize_t 			n;
 	if (Readline(sockfd, message, MAXLINE) == 0)	// wait for the message
 		return;		// other end closed
 
+	len = sizeof(cliaddr);
+	Getpeername(sockfd, (SA *) &cliaddr, &len);
+	Inet_ntop(AF_INET, &cliaddr.sin_addr, buff, sizeof(buff));
+	
 	printf("%s\n", message);
+	current = findName(name);
+	printf("name = %s time joined = %s addr = %s port = %d email count = %d\n", 
+        current->client.client_name, 
+        asctime(current->client.time_joined), 
+        current->client.ip_address, 
+        current->client.ip_port, 
+        current->client.email_counter);
+	curClient = current->client;
+	writeFile(name, buff, curClient.email_counter, message);
+	
+	curClient.email_counter++;
+	
+	deleteEntry(curClient);
+	
+	insertFirst(curClient);
+	
+
 	snprintf(line, sizeof(line), "Message received\n");
 	n = strlen(line);
 	Writen(sockfd, line, n);
-	bzero(line, MAXLINE);
+}
+
+void writeFile(char *name, char *from, int id, char *msg)
+{
+	char 				path[PATH_MAX];
+	time_t 				rawtime;
+	struct tm 			*timeinfo;
+
+	snprintf(path, sizeof(path), "%s/%d", name, id);
+
+	time(&rawtime);
+	timeinfo = localtime(&rawtime);
+	FILE *fptr = fopen(path, "w"); 
+    if (fptr == NULL) 
+    { 
+        printf("Could not open file"); 
+    } 
+	else
+	  	fprintf(fptr,"From: %s\nTo: %s\nDate: %s\n\n%s", from, name, asctime(timeinfo), msg); 
+    
+	fclose(fptr);
 }
 
 void cmd_mailbox(int sockfd, char *name)

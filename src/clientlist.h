@@ -31,6 +31,10 @@ int length();
 //find a link with given entry
 struct client_list* find(struct client entry);
 
+struct client_list* findIP(char *ip);
+
+struct client_list* findName(char *name);
+
 //delete a link with given entry
 struct client_list* deleteEntry(struct client entry);
 

@@ -91,6 +91,52 @@ struct client_list* find(struct client entry)
     return current;
 }
 
+struct client_list* findIP(char *ip) 
+{
+    //start from the first link
+    struct client_list* current = head;
+
+    //if list is empty
+    if(head == NULL) 
+        return NULL;
+
+    //navigate through list
+    while(!strcmp(current->client.ip_address,ip)) 
+    {
+        //if it is last struct client_list
+        if(current->next_client == NULL) 
+            return NULL;
+        else //go to next_client link
+            current = current->next_client;
+    }      
+        
+    //if data found, return the current Link
+    return current;
+}
+
+struct client_list* findName(char *name) 
+{
+    //start from the first link
+    struct client_list* current = head;
+
+    //if list is empty
+    if(head == NULL) 
+        return NULL;
+
+    //navigate through list
+    while(!strcmp(current->client.client_name,name)) 
+    {
+        //if it is last struct client_list
+        if(current->next_client == NULL) 
+            return NULL;
+        else //go to next_client link
+            current = current->next_client;
+    }      
+        
+    //if data found, return the current Link
+    return current;
+}
+
 //delete a link with given entry
 struct client_list* deleteEntry(struct client entry) 
 {
