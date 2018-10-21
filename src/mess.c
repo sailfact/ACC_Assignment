@@ -132,7 +132,7 @@ int check_command_one(int sockfd, char *arg)
 		n = strlen(line);
 		Writen(sockfd, line, n);
 	}
-	bzero(line, MAXLINE);
+
 	return 0;
 }
 
@@ -141,13 +141,13 @@ int check_command_two(int sockfd, char *arg1, char *arg2)
 	int len = strlen(arg1);
     char str[sizeof(arg1)];
     for(int i = 0; i < len; i++)
-        str[i] = tolower(arg1[i]);
-
+		str[i] = tolower(arg1[i]);
+	
     if (strcmp(str, "make") == 0)
  	{
 		cmd_make(sockfd, arg2);
 	}
-    else if (strcmp(str, "mailbox") == 0)
+    else if (strcmp(str, "get_mailbox") == 0)
 	{
         cmd_mailbox(sockfd, arg2);
 	}
@@ -204,7 +204,6 @@ void cmd_make(int sockfd, char *name)
 
 	n = strlen(line);
 	Writen(sockfd, line, n);
-	bzero(line, MAXLINE);
 }
 
 int add_client(char *address, int port, char *name)
@@ -244,7 +243,6 @@ void cmd_quit(int sockfd)
 	char line[MAXLINE];
 	snprintf(line, sizeof(line), "Bye\n");
 	Writen(sockfd, line, strlen(line));
-	bzero(line, MAXLINE);
 }
 
 void cmd_list(int sockfd)
@@ -252,7 +250,6 @@ void cmd_list(int sockfd)
 	char line[MAXLINE];
 	getList(line);
 	Writen(sockfd, line, strlen(line));
-	bzero(line, MAXLINE);
 }
 
 void cmd_read(int sockfd, char *name, int id)
@@ -287,7 +284,6 @@ void cmd_read(int sockfd, char *name, int id)
 	}
 	
 	Writen(sockfd, line, strlen(line));
-	bzero(line, MAXLINE);
 }
 
 void cmd_delete(int sockfd, char *name, int id)
@@ -306,7 +302,6 @@ void cmd_delete(int sockfd, char *name, int id)
   	}
 
 	Writen(sockfd, line, strlen(line));
-	bzero(line, MAXLINE);
 }
 
 void cmd_send(int sockfd, char *name)
@@ -324,25 +319,19 @@ void cmd_send(int sockfd, char *name)
 	Getpeername(sockfd, (SA *) &cliaddr, &len);
 	Inet_ntop(AF_INET, &cliaddr.sin_addr, buff, sizeof(buff));
 	
-	printf("%s\n", message);
 	current = findName(name);
-	printf("name = %s time joined = %s addr = %s port = %d email count = %d\n", 
-        current->client.client_name, 
-        asctime(current->client.time_joined), 
-        current->client.ip_address, 
-        current->client.ip_port, 
-        current->client.email_counter);
-	curClient = current->client;
-	writeFile(name, buff, curClient.email_counter, message);
-	
-	curClient.email_counter++;
-	
-	deleteEntry(curClient);
-	
-	insertFirst(curClient);
-	
+	if (current != NULL)
+	{
+		curClient = current->client;
+		writeFile(name, buff, curClient.email_counter, message);
+		curClient.email_counter++;
+		deleteEntry(curClient);
+		insertFirst(curClient);
+		snprintf(line, sizeof(line), "Message received.\r\n");
+	}
+	else
+		snprintf(line, sizeof(line), "Could not find the client.\r\n");
 
-	snprintf(line, sizeof(line), "Message received\n");
 	n = strlen(line);
 	Writen(sockfd, line, n);
 }
@@ -392,5 +381,4 @@ void cmd_mailbox(int sockfd, char *name)
 
 	n = strlen(line);
 	Writen(sockfd, line, n);
-	bzero(line, MAXLINE);
 }

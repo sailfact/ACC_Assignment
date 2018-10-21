@@ -9,7 +9,7 @@ void getList(char *line)
     //start from the beginning
     while(ptr != NULL) 
     {
-        snprintf(buffer, sizeof(buffer), "name = %s time joined = %s addr = %s port = %d email count = %d\n", 
+        snprintf(buffer, sizeof(buffer), "name = %s time joined = %s \r\naddr = %s port = %d email count = %d\n", 
         ptr->client.client_name, 
         asctime(ptr->client.time_joined), 
         ptr->client.ip_address, 

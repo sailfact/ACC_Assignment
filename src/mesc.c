@@ -22,15 +22,11 @@ void mail_cli (FILE *fp, int sockfd)
 	while ((void *) Fgets(sendline, MAXLINE, fp) != NULL) 
 	{
 		sscanf(sendline, "%s", arg);
-		
-		
-
 		Writen(sockfd, sendline, strlen(sendline));
 		
 		if (strcmp(arg, "send") == 0)
 		{
 			sendMsg(fp,sockfd);
-			printf("finished sending msg\n");
 		}
 		
 		if (Readline(sockfd, recvline, MAXLINE) == 0)
